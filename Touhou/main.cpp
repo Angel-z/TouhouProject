@@ -1,16 +1,21 @@
 #include <Windows.h>
+#include <atlimage.h>
+
+#include "globalVariable.h"
+#include "tools.h"
 
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-extern void MyPaint(HDC hdc);
 
-//HBITMAP hcharactor, hbackground;
-HDC hdc, mdc, bufferdc;
+HDC hdc;
 HWND hwnd;
 ULONGLONG tPre, tNow;
 
-HBITMAP fullmap;
+CImage CIscreen;
+RECT rect;
+
+CImage CIbackground, CIplayer;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR szCmdLine, _In_ int iCmdShow) {
     MSG msg;
@@ -21,7 +26,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         return FALSE;
     }
 
-    GetMessage(&msg, NULL, NULL, NULL); 
+    GetMessage(&msg, NULL, NULL, NULL);
     while (msg.message != WM_QUIT) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
@@ -55,34 +60,32 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
     return RegisterClassEx(&wcex);
 }
 
-
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
-    hwnd = CreateWindow("Touhou", "Touhou Project", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME, CW_USEDEFAULT, 0,
-                        CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+    hwnd = CreateWindow("Touhou", "Touhou Project", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME,
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
     if (!hwnd) {
         return FALSE;
     }
 
-    MoveWindow(hwnd, 10, 10, 800, 600, false);
+    MoveWindow(hwnd, 10, 10, 1024, 768, false);
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
     /////////////////////////////
-    RECT rect;
-    //BITMAP charactor{};
 
     GetClientRect(hwnd, &rect);
     hdc = GetDC(hwnd);
-    mdc = CreateCompatibleDC(hdc);                                   //小DC，for大图
-    bufferdc = CreateCompatibleDC(hdc);                              //小DC，for小图
-    fullmap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);  //大图
+    CIscreen.Create(rect.right, rect.bottom, 32);
 
-    SelectObject(mdc, fullmap);
+    // hbackground = (HBITMAP)LoadImage(NULL, "di24.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
+    // hcharactor = (HBITMAP)LoadImage(NULL, "ren24w.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
+    // GetObject(hcharactor, sizeof(BITMAP), (LPVOID)&charactor);
 
-    //hbackground = (HBITMAP)LoadImage(NULL, "di24.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
-    //hcharactor = (HBITMAP)LoadImage(NULL, "ren24w.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
-    //GetObject(hcharactor, sizeof(BITMAP), (LPVOID)&charactor);
+    CString cs_bk = "resources/bk.jpg";
+    CString cs_player = "resources/1.png";
+    LoadImg(CIbackground, cs_bk);
+    LoadImg(CIplayer, cs_player);
 
     MyPaint(hdc);
 
