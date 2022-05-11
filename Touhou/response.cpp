@@ -4,6 +4,10 @@
 #include "globalVariable.h"
 #include "tools.h"
 
+bool bShoot = false;
+
+int iMx, iMy;
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_KEYDOWN: {
@@ -11,9 +15,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
         case WM_KEYUP: {
         } break;
         case WM_MOUSEMOVE: {
+            iMx = LOWORD(lParam);
+            iMy = HIWORD(lParam);
         } break;
         case WM_DESTROY:
-            CIscreen.Destroy();
+            ciScreen.Destroy();
+            ciBackground.Destroy();
             ReleaseDC(hwnd, hdc);
             PostQuitMessage(0);
             break;

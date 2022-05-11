@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <atlimage.h>
 
+#include "entity.h"
 #include "globalVariable.h"
 #include "tools.h"
 
@@ -12,10 +13,14 @@ HDC hdc;
 HWND hwnd;
 ULONGLONG tPre, tNow;
 
-CImage CIscreen;
+CImage ciScreen;
 RECT rect;
 
-CImage CIbackground, CIplayer;
+CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer;
+Player player;
+
+int iBackgroundOff = 1;
+
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR szCmdLine, _In_ int iCmdShow) {
     MSG msg;
@@ -33,8 +38,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
             DispatchMessage(&msg);
         } else {
             tNow = GetTickCount64();
-            if (tNow - tPre >= 60)
+            if (tNow - tPre >= 33) {
+                GameCheck();
                 MyPaint(hdc);
+            }
         }
     }
     return msg.wParam;
@@ -68,7 +75,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
         return FALSE;
     }
 
-    MoveWindow(hwnd, 10, 10, 1024, 768, false);
+    RECT rcWindow;
+    RECT rcClient;
+    int borderWidth, borderHeight;
+
+    GetWindowRect(hwnd, &rcWindow);
+
+    GetClientRect(hwnd, &rcClient);
+
+    borderWidth = (rcWindow.right - rcWindow.left) - (rcClient.right - rcClient.left);
+    borderHeight = (rcWindow.bottom - rcWindow.top) - (rcClient.bottom - rcClient.top);
+
+    MoveWindow(hwnd, 0, 0, 1024, 768, true);
+    SetWindowPos(hwnd, 0, 0, 0, borderWidth + 1024, borderHeight + 768, SWP_NOMOVE | SWP_NOZORDER);
+
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
@@ -76,16 +96,26 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 
     GetClientRect(hwnd, &rect);
     hdc = GetDC(hwnd);
-    CIscreen.Create(rect.right, rect.bottom, 32);
+    ciScreen.Create(1024, 768, 32);
 
-    // hbackground = (HBITMAP)LoadImage(NULL, "di24.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
-    // hcharactor = (HBITMAP)LoadImage(NULL, "ren24w.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
-    // GetObject(hcharactor, sizeof(BITMAP), (LPVOID)&charactor);
+    // resources load
+    CString csBkBlock = "resources/background.png";
+    CString csPlayer = "resources/pl00.png";
+    CString csTitleBk = "resources/title_bk01.png";
 
-    CString cs_bk = "resources/bk.jpg";
-    CString cs_player = "resources/1.png";
-    LoadImg(CIbackground, cs_bk);
-    LoadImg(CIplayer, cs_player);
+    LoadImg(ciBkBlock, csBkBlock);
+    LoadImg(ciPlayer, csPlayer);
+    LoadImg(ciTitleBk, csTitleBk);
+
+    ciBackground.Create(GWidth, 1024, 32);
+
+    HDC hDcBackground = ciBackground.GetDC();
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            ciBkBlock.Draw(hDcBackground, i * 256, j * 256);
+        }
+    }
+    ciBackground.ReleaseDC();
 
     MyPaint(hdc);
 
