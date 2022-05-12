@@ -16,7 +16,7 @@ ULONGLONG tPre, tNow;
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer;
+CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet;
 Player player;
 
 int iBackgroundOff = 1;
@@ -38,7 +38,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
             DispatchMessage(&msg);
         } else {
             tNow = GetTickCount64();
-            if (tNow - tPre >= 33) {
+            if (tNow - tPre >= 17) {
                 GameCheck();
                 MyPaint(hdc);
             }
@@ -102,10 +102,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     CString csBkBlock = "resources/background.png";
     CString csPlayer = "resources/pl00.png";
     CString csTitleBk = "resources/title_bk01.png";
+    CString csPlayerBullet = "resources/pl00bullet.png";
 
     LoadImg(ciBkBlock, csBkBlock);
     LoadImg(ciPlayer, csPlayer);
     LoadImg(ciTitleBk, csTitleBk);
+    LoadImg(ciPlayerBullet, csPlayerBullet);
 
     ciBackground.Create(GWidth, 1024, 32);
 
@@ -115,6 +117,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
             ciBkBlock.Draw(hDcBackground, i * 256, j * 256);
         }
     }
+    ciBkBlock.Destroy();
     ciBackground.ReleaseDC();
 
     MyPaint(hdc);

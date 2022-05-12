@@ -66,6 +66,20 @@ void GameCheck() {
         bPRight = false;
     }
 
+    // Bullet Check
+    player.bulletMoving();
+    Bullet *tmpBullet = nullptr;
+    if (GetAsyncKeyState(0x5A)) {
+        tmpBullet = player.getBullet();
+        if (tNow - tmpBullet->msLastShoot > tmpBullet->msBulletCold) {
+            player.bulletStatusChange(true);
+        }
+        if (tmpBullet->bulletUsable) {
+            player.bulletSpawn();
+            player.bulletStatusChange(false);
+        }
+    }
+
 }
 
 void MyPaint(HDC hdc) {
@@ -77,6 +91,9 @@ void MyPaint(HDC hdc) {
     ciBackground.Draw(mdc, 0, 0, ciBackground.GetWidth(), iBackgroundOff, 0, ciScreen.GetHeight() - iBackgroundOff,
                       ciBackground.GetWidth(), iBackgroundOff);
     iBackgroundOff = (iBackgroundOff + 8) % GHeight;
+
+    // Draw Bullet
+    player.BulletPlayer.draw(mdc);
 
     // Draw Entity
     player.draw(mdc, player.ptLeftTop.x, player.ptLeftTop.y);

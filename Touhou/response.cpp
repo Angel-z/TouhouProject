@@ -21,6 +21,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
         case WM_DESTROY:
             ciScreen.Destroy();
             ciBackground.Destroy();
+            ciPlayer.Destroy();
+            ciTitleBk.Destroy();
+            ciPlayerBullet.Destroy();
             ReleaseDC(hwnd, hdc);
             PostQuitMessage(0);
             break;

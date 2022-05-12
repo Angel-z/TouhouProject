@@ -2,18 +2,9 @@
 
 #include <atlimage.h>
 
-#include "globalVariable.h"
+#include <vector>
 
-Entity::Entity() {
-    ix = 0;
-    iy = 0;
-    iFileWidth = 0;
-    iFileHeight = 0;
-    iWidth = 0;
-    iHeight = 0;
-    iRadius = 0;
-    ptLeftTop = {0, 0};
-}
+#include "globalVariable.h"
 
 Entity::Entity(int _x, int _y, int _iFileWidth, int _iFileHeight, int _iRadius) {
     ix = _x;
@@ -28,10 +19,41 @@ Entity::Entity(int _x, int _y, int _iFileWidth, int _iFileHeight, int _iRadius) 
 }
 
 void Entity::draw(HDC hdc, int x, int y) {}
+void Entity::bulletStatusChange(bool stat) {}
+Bullet *Entity::getBullet() {
+    return nullptr;
+}
+void Entity::bulletSpawn() {}
+void Entity::bulletMoving() {}
 
+void Entity::xChange(int x) {
+    ix += x;
+    ptLeftTop.x += x;
+}
+
+void Entity::yChange(int y) {
+    iy += y;
+    ptLeftTop.y += y;
+}
+
+// Bullet
+Bullet::Bullet(CImage &_ci, int _iFileWidth, int _iFileHeight, int _msBulletCold)
+    : Entity(0, 0, _iFileWidth, _iFileHeight, 0), ci(_ci) {
+    bulletUsable = true;
+    msBulletCold = _msBulletCold;
+    msLastShoot = 0;
+}
+
+void Bullet::draw(HDC hdc) {
+    for (auto it = ptPos.begin(); it < ptPos.end(); it++) {
+        ci.Draw(hdc, it->x - iWidth / 2, it->y - iHeight / 2, iWidth, iHeight);
+    }
+}
+
+// Player
 CImage &Player::ci = ciPlayer;
 
-Player::Player() : Entity(0, 0, 32, 48, 0) {
+Player::Player() : Entity(0, 0, 32, 48, 0), BulletPlayer(ciPlayerBullet, 10, 15, 70) {
     ix = GWidth / 2 - iWidth / 2;
     iy = GHeight - iHeight + iHeight / 2;
     ptLeftTop.x = ix - iWidth / 2;
@@ -40,16 +62,6 @@ Player::Player() : Entity(0, 0, 32, 48, 0) {
     iUpDownIndex = 0;
     iLeftIndex = 0;
     iRightIndex = 0;
-}
-
-void Player::xChange(int x) {
-    ix += x;
-    ptLeftTop.x += x;
-}
-
-void Player::yChange(int y) {
-    iy += y;
-    ptLeftTop.y += y;
 }
 
 void Player::draw(HDC hdc, int x, int y) {
@@ -66,7 +78,8 @@ void Player::draw(HDC hdc, int x, int y) {
         if (iRightIndex == 8) {
             iRightIndex = 3;
         }
-        Player::ci.Draw(hdc, x, y, iWidth, iHeight, iFileWidth * iRightIndex++, iFileHeight * 2, iFileWidth, iFileHeight);
+        Player::ci.Draw(hdc, x, y, iWidth, iHeight, iFileWidth * iRightIndex++, iFileHeight * 2, iFileWidth,
+                        iFileHeight);
     } else if (bPUp) {
         iLeftIndex = 0;
         iRightIndex = 0;
@@ -84,5 +97,34 @@ void Player::draw(HDC hdc, int x, int y) {
         Player::ci.Draw(hdc, x, y, iWidth, iHeight, iFileWidth * iUpDownIndex++, 0, iFileWidth, iFileHeight);
     } else {
         Player::ci.Draw(hdc, x, y, iWidth, iHeight, 0, 0, iFileWidth, iFileHeight);
+    }
+}
+void Player::bulletStatusChange(bool stat) {
+    if (stat) {
+        BulletPlayer.bulletUsable = true;
+    } else {
+        BulletPlayer.bulletUsable = false;
+        BulletPlayer.msLastShoot = tNow;
+    }
+}
+
+Bullet *Player::getBullet() {
+    return &BulletPlayer;
+}
+
+void Player::bulletSpawn() {
+    POINT ptSpawn{ix, iy};
+    BulletPlayer.ptPos.push_back(ptSpawn);
+}
+
+void Player::bulletMoving() {
+    auto it = BulletPlayer.ptPos.begin();
+    while (it < BulletPlayer.ptPos.end()) {
+        if (it->y - iBulletSpeed > -15) {
+            it->y -= iBulletSpeed;
+            ++it;
+        } else {
+            it = BulletPlayer.ptPos.erase(it);
+        }
     }
 }
