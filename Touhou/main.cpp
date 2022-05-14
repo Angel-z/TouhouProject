@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <atlimage.h>
+#include <vector>
 
 #include "entity.h"
 #include "globalVariable.h"
@@ -16,8 +17,11 @@ ULONGLONG tPre, tNow;
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet;
+CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet;
+
+// Entity Control
 Player player;
+std::vector<Entity *> EnemyExists;
 
 int iBackgroundOff = 1;
 
@@ -103,11 +107,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     CString csPlayer = "resources/pl00.png";
     CString csTitleBk = "resources/title_bk01.png";
     CString csPlayerBullet = "resources/pl00bullet.png";
+    CString csEnemy1 = "resources/enemy1.png";
+    CString csEnemyBullet = "resources/bullet1.png";
 
     LoadImg(ciBkBlock, csBkBlock);
     LoadImg(ciPlayer, csPlayer);
     LoadImg(ciTitleBk, csTitleBk);
     LoadImg(ciPlayerBullet, csPlayerBullet);
+    LoadImg(ciEnemy1, csEnemy1);
+    LoadImg(ciEnemyBullet, csEnemyBullet);
 
     ciBackground.Create(GWidth, 1024, 32);
 
@@ -119,6 +127,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     }
     ciBkBlock.Destroy();
     ciBackground.ReleaseDC();
+
+
+    //test
+    Enemy1 *e1 = new Enemy1();
+    e1->xySet(100, 100);
+    EnemyExists.push_back(e1);
 
     MyPaint(hdc);
 

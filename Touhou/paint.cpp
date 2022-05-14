@@ -65,8 +65,11 @@ void GameCheck() {
         bPLeft = false;
         bPRight = false;
     }
+    
+    // Player Moving Collision Check
+    // TODO
 
-    // Bullet Check
+    // Player Bullet Spawn Check
     player.bulletMoving();
     Bullet *tmpBullet = nullptr;
     if (GetAsyncKeyState(0x5A)) {
@@ -77,6 +80,19 @@ void GameCheck() {
         if (tmpBullet->bulletUsable) {
             player.bulletSpawn();
             player.bulletStatusChange(false);
+        }
+    }
+
+    // Enemy Bullet Spawn Check
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); it++) {
+        (*it)->bulletMoving();
+        tmpBullet = (*it)->getBullet();
+        if (tNow - tmpBullet->msLastShoot > tmpBullet->msBulletCold) {
+            (*it)->bulletStatusChange(true);
+        }
+        if (tmpBullet->bulletUsable) {
+            (*it)->bulletSpawn();
+            (*it)->bulletStatusChange(false);
         }
     }
 
@@ -94,9 +110,19 @@ void MyPaint(HDC hdc) {
 
     // Draw Bullet
     player.BulletPlayer.draw(mdc);
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); it++) {
+        (*it)->getBullet()->draw(mdc);
+    }
+
+    // test
+    auto e1 = EnemyExists.begin();
+    (*e1)->draw(mdc);
 
     // Draw Entity
-    player.draw(mdc, player.ptLeftTop.x, player.ptLeftTop.y);
+    player.draw(mdc); // Last draw
+
+
+    // Done
     ciScreen.ReleaseDC();
     ciScreen.Draw(hdc, rect);
 

@@ -14,14 +14,15 @@ class Entity {
     int iFileHeight;
     int iWidth;
     int iHeight;
+    int iFileRadius;
     int iRadius;
 
     POINT ptLeftTop;
 
    public:
-    Entity(int _x, int _y, int _iFileWidth, int _iFileHeight, int _iRadius);
+    Entity(int _x, int _y, int _iFileWidth, int _iFileHeight, int _iFileRadius);
 
-    virtual void draw(HDC hdc, int x, int y);
+    virtual void draw(HDC hdc);
     virtual void bulletStatusChange(bool stat);
     virtual Bullet *getBullet();
     virtual void bulletSpawn();
@@ -29,6 +30,7 @@ class Entity {
 
     void xChange(int x);
     void yChange(int y);
+    void xySet(int x, int y);
 };
 
 class Bullet : public Entity {
@@ -41,9 +43,9 @@ class Bullet : public Entity {
     std::vector<POINT> ptPos;
 
    public:
-    Bullet(CImage &_ci, int _iFileWidth, int _iFileHeight, int _msBulletCold);
+    Bullet(CImage &_ci, int _iFileWidth, int _iFileHeight, int _msBulletCold, int _iFileRadius);
 
-    void draw(HDC hdc);
+    void draw(HDC hdc) override;
 };
 
 class Player : public Entity {
@@ -55,11 +57,29 @@ class Player : public Entity {
     int iRightIndex;
 
     Bullet BulletPlayer;
+    int BulletDamage;
 
    public:
     Player();
 
-    void draw(HDC hdc, int x, int y) override;
+    void draw(HDC hdc) override;
+    void bulletStatusChange(bool stat) override;
+    Bullet *getBullet() override;
+    void bulletSpawn() override;
+    void bulletMoving() override;
+};
+
+class Enemy1 : public Entity {
+   public:
+    static CImage &ci;
+
+    int iHealth;
+
+    Bullet BulletEnemy;
+   public:
+    Enemy1();
+
+    void draw(HDC hdc) override;
     void bulletStatusChange(bool stat) override;
     Bullet *getBullet() override;
     void bulletSpawn() override;

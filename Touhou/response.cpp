@@ -25,6 +25,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
             ciTitleBk.Destroy();
             ciPlayerBullet.Destroy();
             ReleaseDC(hwnd, hdc);
+            //
+            delete *EnemyExists.begin();
             PostQuitMessage(0);
             break;
         default:
