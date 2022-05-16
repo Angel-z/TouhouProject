@@ -54,7 +54,7 @@ Bullet::Bullet(CImage &_ci, int _iFileWidth, int _iFileHeight, int _msBulletCold
 }
 
 void Bullet::draw(HDC hdc) {
-    for (auto it = ptPos.begin(); it < ptPos.end(); it++) {
+    for (auto it = ptPos.begin(); it < ptPos.end(); ++it) {
         ci.Draw(hdc, it->x - iWidth / 2, it->y - iHeight / 2, iWidth, iHeight);
     }
 }
@@ -62,7 +62,7 @@ void Bullet::draw(HDC hdc) {
 // Player
 CImage &Player::ci = ciPlayer;
 
-Player::Player() : Entity(0, 0, 32, 48, 0), BulletPlayer(ciPlayerBullet, 10, 15, 70, 0) {
+Player::Player() : Entity(0, 0, 32, 48, 5), BulletPlayer(ciPlayerBullet, 10, 15, 70, 0) {
     ix = GWidth / 2 - iWidth / 2;
     iy = GHeight - iHeight + iHeight / 2;
     ptLeftTop.x = ix - iWidth / 2;
@@ -149,7 +149,7 @@ void Player::bulletMoving() {
 // Enemy1
 CImage &Enemy1::ci = ciEnemy1;
 
-Enemy1::Enemy1() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet, 16, 16, 500, 8) {
+Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 500, 8) {
     iHealth = 800;
 }
 
@@ -176,6 +176,47 @@ void Enemy1::bulletSpawn() {
 }
 
 void Enemy1::bulletMoving() {
+    auto it = BulletEnemy.ptPos.begin();
+    while (it < BulletEnemy.ptPos.end()) {
+        if (it->y + (iBulletSpeed - 25) < BulletEnemy.iHeight + GHeight) {
+            it->y += (iBulletSpeed - 25);
+            ++it;
+        } else {
+            it = BulletEnemy.ptPos.erase(it);
+        }
+    }
+}
+
+// Enemy2
+CImage &Enemy2::ci = ciEnemy2;
+
+Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 500, 8) {
+    iHealth = 800;
+}
+
+void Enemy2::draw(HDC hdc) {
+    Enemy2::ci.Draw(hdc, ptLeftTop.x, ptLeftTop.y, iWidth, iHeight, 0, 0, iFileWidth, iFileHeight);
+}
+
+void Enemy2::bulletStatusChange(bool stat) {
+    if (stat) {
+        BulletEnemy.bulletUsable = true;
+    } else {
+        BulletEnemy.bulletUsable = false;
+        BulletEnemy.msLastShoot = tNow;
+    }
+}
+
+Bullet *Enemy2::getBullet() {
+    return &BulletEnemy;
+}
+
+void Enemy2::bulletSpawn() {
+    POINT ptSpawn{ix, iy};
+    BulletEnemy.ptPos.push_back(ptSpawn);
+}
+
+void Enemy2::bulletMoving() {
     auto it = BulletEnemy.ptPos.begin();
     while (it < BulletEnemy.ptPos.end()) {
         if (it->y + (iBulletSpeed - 25) < BulletEnemy.iHeight + GHeight) {

@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <atlimage.h>
+#include <math.h>
 
 #include "entity.h"
 #include "globalVariable.h"
@@ -23,7 +24,6 @@ void GameCheck() {
             bPUp = false;
             bPDown = false;
         }
-        
     } else if (GetAsyncKeyState(VK_DOWN)) {
         if (player.ptLeftTop.y + player.iHeight + iPlayerSpeed > GHeight) {
             player.ptLeftTop.y = GHeight - player.iHeight;
@@ -51,7 +51,6 @@ void GameCheck() {
             bPLeft = false;
             bPRight = false;
         }
-        
     } else if (GetAsyncKeyState(VK_RIGHT)) {
         if (player.ptLeftTop.x + player.iWidth + iPlayerSpeed > GWidth) {
             player.ptLeftTop.x = GWidth - player.iWidth;
@@ -65,9 +64,31 @@ void GameCheck() {
         bPLeft = false;
         bPRight = false;
     }
-    
-    // Player Moving Collision Check
-    // TODO
+
+    // Collision Check
+    Bullet *tmpplayerbullet = player.getBullet();
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
+        Bullet *tmpBullet = (*it)->getBullet();
+        // PlayerBullet To Enemy
+        for (auto itpl = tmpplayerbullet->ptPos.begin(); itpl != tmpplayerbullet->ptPos.end(); ++itpl) {
+            if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y, tmpplayerbullet->iWidth,
+                    tmpplayerbullet->iHeight)) {
+                MessageBox(hwnd, "attacked", "enemydead", MB_OK);
+            }
+        }
+        // EnemyBullet To Player
+        for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
+            if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
+                    player.iHeight - 30)) {
+                MessageBox(hwnd, "bulleted", "playerdead", MB_OK);
+            }
+        }
+        // Enemy To Player
+        if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy, player.iWidth - 40,
+                player.iHeight - 30)) {
+            MessageBox(hwnd, "enemy", "playerdead", MB_OK);
+        }
+    }
 
     // Player Bullet Spawn Check
     player.bulletMoving();
@@ -84,7 +105,7 @@ void GameCheck() {
     }
 
     // Enemy Bullet Spawn Check
-    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); it++) {
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->bulletMoving();
         tmpBullet = (*it)->getBullet();
         if (tNow - tmpBullet->msLastShoot > tmpBullet->msBulletCold) {
@@ -95,7 +116,6 @@ void GameCheck() {
             (*it)->bulletStatusChange(false);
         }
     }
-
 }
 
 void MyPaint(HDC hdc) {
@@ -110,17 +130,21 @@ void MyPaint(HDC hdc) {
 
     // Draw Bullet
     player.BulletPlayer.draw(mdc);
-    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); it++) {
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->getBullet()->draw(mdc);
     }
 
     // test
-    auto e1 = EnemyExists.begin();
-    (*e1)->draw(mdc);
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
+        (*it)->draw(mdc);
+    }
+    // auto e1 = EnemyExists.begin();
+    //(*e1)->draw(mdc);
 
     // Draw Entity
-    player.draw(mdc); // Last draw
-
+    player.draw(mdc);  // Last draw
+    // ciEnemyBullet2.Draw(mdc, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
+    //                    player.iRadius * 2, 0, 0, 16, 16);
 
     // Done
     ciScreen.ReleaseDC();

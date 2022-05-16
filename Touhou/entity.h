@@ -85,3 +85,21 @@ class Enemy1 : public Entity {
     void bulletSpawn() override;
     void bulletMoving() override;
 };
+
+class Enemy2 : public Entity {
+   public:
+    static CImage &ci;
+
+    int iHealth;
+
+    Bullet BulletEnemy;
+
+   public:
+    Enemy2();
+
+    void draw(HDC hdc) override;
+    void bulletStatusChange(bool stat) override;
+    Bullet *getBullet() override;
+    void bulletSpawn() override;
+    void bulletMoving() override;
+};

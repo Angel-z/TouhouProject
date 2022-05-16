@@ -23,6 +23,7 @@ extern int iBackgroundOff;
 
 // Sources
 extern CImage ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet;
+extern CImage ciEnemy2, ciEnemyBullet2;
 
 // Entity
 extern Player player;

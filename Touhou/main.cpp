@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <atlimage.h>
+
 #include <vector>
 
 #include "entity.h"
@@ -18,13 +19,13 @@ CImage ciScreen;
 RECT rect;
 
 CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet;
+CImage ciEnemy2, ciEnemyBullet2;
 
 // Entity Control
 Player player;
 std::vector<Entity *> EnemyExists;
 
 int iBackgroundOff = 1;
-
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR szCmdLine, _In_ int iCmdShow) {
     MSG msg;
@@ -109,6 +110,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     CString csPlayerBullet = "resources/pl00bullet.png";
     CString csEnemy1 = "resources/enemy1.png";
     CString csEnemyBullet = "resources/bullet1.png";
+    CString csEnemy2 = "resources/enemy2.png";
+    CString csEnemyBullet2 = "resources/bullet2.png";
 
     LoadImg(ciBkBlock, csBkBlock);
     LoadImg(ciPlayer, csPlayer);
@@ -116,6 +119,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     LoadImg(ciPlayerBullet, csPlayerBullet);
     LoadImg(ciEnemy1, csEnemy1);
     LoadImg(ciEnemyBullet, csEnemyBullet);
+    LoadImg(ciEnemy2, csEnemy2);
+    LoadImg(ciEnemyBullet2, csEnemyBullet2);
 
     ciBackground.Create(GWidth, 1024, 32);
 
@@ -128,11 +133,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     ciBkBlock.Destroy();
     ciBackground.ReleaseDC();
 
-
-    //test
+    // test
     Enemy1 *e1 = new Enemy1();
     e1->xySet(100, 100);
     EnemyExists.push_back(e1);
+    Enemy2 *e2 = new Enemy2();
+    e2->xySet(200, 200);
+    EnemyExists.push_back(e2);
 
     MyPaint(hdc);
 
