@@ -27,6 +27,10 @@ class Entity {
     virtual Bullet *getBullet();
     virtual void bulletSpawn();
     virtual void bulletMoving();
+    virtual bool isDead();
+    virtual void changeDead();
+    virtual int getHealth();
+    virtual void changeHealth(int health);
 
     void xChange(int x);
     void yChange(int y);
@@ -74,6 +78,7 @@ class Enemy1 : public Entity {
     static CImage &ci;
 
     int iHealth;
+    bool bDead;
 
     Bullet BulletEnemy;
    public:
@@ -84,6 +89,10 @@ class Enemy1 : public Entity {
     Bullet *getBullet() override;
     void bulletSpawn() override;
     void bulletMoving() override;
+    bool isDead() override;
+    void changeDead() override;
+    int getHealth() override;
+    void changeHealth(int health) override;
 };
 
 class Enemy2 : public Entity {
@@ -91,6 +100,7 @@ class Enemy2 : public Entity {
     static CImage &ci;
 
     int iHealth;
+    bool bDead;
 
     Bullet BulletEnemy;
 
@@ -102,4 +112,8 @@ class Enemy2 : public Entity {
     Bullet *getBullet() override;
     void bulletSpawn() override;
     void bulletMoving() override;
+    bool isDead() override;
+    void changeDead() override;
+    int getHealth() override;
+    void changeHealth(int health) override;
 };

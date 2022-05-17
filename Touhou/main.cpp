@@ -24,6 +24,7 @@ CImage ciEnemy2, ciEnemyBullet2;
 // Entity Control
 Player player;
 std::vector<Entity *> EnemyExists;
+std::vector<std::pair<Entity *, int>> EnemyDead;
 
 int iBackgroundOff = 1;
 

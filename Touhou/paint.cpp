@@ -67,28 +67,69 @@ void GameCheck() {
 
     // Collision Check
     Bullet *tmpplayerbullet = player.getBullet();
+    auto it = EnemyExists.begin();
+    while (it != EnemyExists.end()) {
+        Bullet *tmpBullet = (*it)->getBullet();
+        if (!(*it)->isDead()) {
+            // PlayerBullet To Enemy
+            for (auto itpl = tmpplayerbullet->ptPos.begin(); itpl != tmpplayerbullet->ptPos.end(); ++itpl) {
+                if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y,
+                        tmpplayerbullet->iWidth, tmpplayerbullet->iHeight)) {
+                    // MessageBox(hwnd, "attacked", "enemydead", MB_OK);
+                    if ((*it)->getHealth() < player.BulletDamage) {
+                        (*it)->changeDead();
+                        break;
+                    } else {
+                        (*it)->changeHealth(-player.BulletDamage);
+                    }
+                }
+            }
+            // Enemy To Player
+            if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
+                    player.iWidth - 40, player.iHeight - 40)) {
+                MessageBox(hwnd, "enemy", "playerdead", MB_OK);
+            }
+        } else {
+            if (tmpBullet->ptPos.empty()) {
+                it = EnemyExists.erase(it);
+                continue;
+            }
+        }
+        // EnemyBullet To Player
+        for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
+            if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
+                    player.iHeight - 40)) {
+                MessageBox(hwnd, "bulleted", "playerdead", MB_OK);
+            }
+        }
+
+        ++it;
+    }
+
+    /*
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         Bullet *tmpBullet = (*it)->getBullet();
         // PlayerBullet To Enemy
         for (auto itpl = tmpplayerbullet->ptPos.begin(); itpl != tmpplayerbullet->ptPos.end(); ++itpl) {
             if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y, tmpplayerbullet->iWidth,
                     tmpplayerbullet->iHeight)) {
-                MessageBox(hwnd, "attacked", "enemydead", MB_OK);
+                // MessageBox(hwnd, "attacked", "enemydead", MB_OK);
             }
         }
         // EnemyBullet To Player
         for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
             if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
-                    player.iHeight - 30)) {
+                    player.iHeight - 40)) {
                 MessageBox(hwnd, "bulleted", "playerdead", MB_OK);
             }
         }
         // Enemy To Player
         if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy, player.iWidth - 40,
-                player.iHeight - 30)) {
+                player.iHeight - 40)) {
             MessageBox(hwnd, "enemy", "playerdead", MB_OK);
         }
     }
+    */
 
     // Player Bullet Spawn Check
     player.bulletMoving();
@@ -107,13 +148,15 @@ void GameCheck() {
     // Enemy Bullet Spawn Check
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->bulletMoving();
-        tmpBullet = (*it)->getBullet();
-        if (tNow - tmpBullet->msLastShoot > tmpBullet->msBulletCold) {
-            (*it)->bulletStatusChange(true);
-        }
-        if (tmpBullet->bulletUsable) {
-            (*it)->bulletSpawn();
-            (*it)->bulletStatusChange(false);
+        if (!(*it)->isDead()) {
+            tmpBullet = (*it)->getBullet();
+            if (tNow - tmpBullet->msLastShoot > tmpBullet->msBulletCold) {
+                (*it)->bulletStatusChange(true);
+            }
+            if (tmpBullet->bulletUsable) {
+                (*it)->bulletSpawn();
+                (*it)->bulletStatusChange(false);
+            }
         }
     }
 }
@@ -136,10 +179,10 @@ void MyPaint(HDC hdc) {
 
     // test
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-        (*it)->draw(mdc);
+        if (!(*it)->isDead()) {
+            (*it)->draw(mdc);
+        }
     }
-    // auto e1 = EnemyExists.begin();
-    //(*e1)->draw(mdc);
 
     // Draw Entity
     player.draw(mdc);  // Last draw

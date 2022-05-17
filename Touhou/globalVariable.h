@@ -28,10 +28,10 @@ extern CImage ciEnemy2, ciEnemyBullet2;
 // Entity
 extern Player player;
 extern std::vector<Entity *> EnemyExists;
+extern std::vector<std::pair<Entity *, int>> EnemyDead;
 
 // Player Acting
 extern bool bPLeft, bPRight, bPUp, bPDown;
-extern bool bShoot;
 
 // Func
 void GameCheck();

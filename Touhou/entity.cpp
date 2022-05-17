@@ -27,6 +27,16 @@ Bullet *Entity::getBullet() {
 }
 void Entity::bulletSpawn() {}
 void Entity::bulletMoving() {}
+bool Entity::isDead() {
+    return false;
+}
+void Entity::changeDead() {}
+
+int Entity::getHealth() {
+    return 0;
+}
+
+void Entity::changeHealth(int health) {}
 
 void Entity::xChange(int x) {
     ix += x;
@@ -71,7 +81,7 @@ Player::Player() : Entity(0, 0, 32, 48, 5), BulletPlayer(ciPlayerBullet, 10, 15,
     iUpDownIndex = 0;
     iLeftIndex = 0;
     iRightIndex = 0;
-    
+
     BulletDamage = 100;
 }
 
@@ -83,8 +93,7 @@ void Player::draw(HDC hdc) {
             iLeftIndex = 3;
         }
         Player::ci.Draw(hdc, ptLeftTop.x, ptLeftTop.y, iWidth, iHeight, iFileWidth * iLeftIndex++, iFileHeight,
-                        iFileWidth,
-                        iFileHeight);
+                        iFileWidth, iFileHeight);
     } else if (bPRight) {
         iUpDownIndex = 0;
         iLeftIndex = 0;
@@ -92,8 +101,7 @@ void Player::draw(HDC hdc) {
             iRightIndex = 3;
         }
         Player::ci.Draw(hdc, ptLeftTop.x, ptLeftTop.y, iWidth, iHeight, iFileWidth * iRightIndex++, iFileHeight * 2,
-                        iFileWidth,
-                        iFileHeight);
+                        iFileWidth, iFileHeight);
     } else if (bPUp) {
         iLeftIndex = 0;
         iRightIndex = 0;
@@ -145,12 +153,12 @@ void Player::bulletMoving() {
     }
 }
 
-
 // Enemy1
 CImage &Enemy1::ci = ciEnemy1;
 
 Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 500, 8) {
     iHealth = 800;
+    bDead = false;
 }
 
 void Enemy1::draw(HDC hdc) {
@@ -187,11 +195,28 @@ void Enemy1::bulletMoving() {
     }
 }
 
+bool Enemy1::isDead() {
+    return bDead;
+}
+
+void Enemy1::changeDead() {
+    bDead = true;
+}
+
+int Enemy1::getHealth() {
+    return iHealth;
+}
+
+void Enemy1::changeHealth(int health) {
+    iHealth += health;
+}
+
 // Enemy2
 CImage &Enemy2::ci = ciEnemy2;
 
 Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 500, 8) {
     iHealth = 800;
+    bDead = false;
 }
 
 void Enemy2::draw(HDC hdc) {
@@ -226,4 +251,20 @@ void Enemy2::bulletMoving() {
             it = BulletEnemy.ptPos.erase(it);
         }
     }
+}
+
+bool Enemy2::isDead() {
+    return bDead;
+}
+
+void Enemy2::changeDead() {
+    bDead = true;
+}
+
+int Enemy2::getHealth() {
+    return iHealth;
+}
+
+void Enemy2::changeHealth(int health) {
+    iHealth += health;
 }
