@@ -20,19 +20,27 @@ extern RECT rect;
 
 extern int iBackgroundOff;
 
-
 // Sources
-extern CImage ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet;
-extern CImage ciEnemy2, ciEnemyBullet2;
+extern CImage ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak;
+extern CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
-// Entity
+// Entity Control
 extern Player player;
 extern std::vector<Entity *> EnemyExists;
 extern std::vector<std::pair<Entity *, int>> EnemyDead;
 
+// Game Control
+extern bool running, win, fail;
+
 // Player Acting
 extern bool bPLeft, bPRight, bPUp, bPDown;
 
+// Mouse Check
+extern int iMx, iMy;
+extern bool LBdown;
+
 // Func
+void GamePaint(HDC hdc);
 void GameCheck();
-void MyPaint(HDC hdc);
+void MenuPaint(HDC hdc);
+void MenuCheck();

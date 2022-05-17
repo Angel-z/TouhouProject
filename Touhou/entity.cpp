@@ -18,6 +18,8 @@ Entity::Entity(int _x, int _y, int _iFileWidth, int _iFileHeight, int _iFileRadi
     iRadius = iFileRadius * ZOOM;
     ptLeftTop.x = ix - iWidth / 2;
     ptLeftTop.y = iy - iHeight / 2;
+
+    bCanBeDeleted = false;
 }
 
 void Entity::draw(HDC hdc) {}

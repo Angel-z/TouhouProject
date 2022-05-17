@@ -17,6 +17,8 @@ class Entity {
     int iFileRadius;
     int iRadius;
 
+    bool bCanBeDeleted;
+
     POINT ptLeftTop;
 
    public:
@@ -81,6 +83,7 @@ class Enemy1 : public Entity {
     bool bDead;
 
     Bullet BulletEnemy;
+
    public:
     Enemy1();
 

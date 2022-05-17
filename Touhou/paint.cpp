@@ -9,6 +9,17 @@
 bool bPLeft = false, bPRight = false, bPUp = false, bPDown = false;
 
 void GameCheck() {
+    // Dead Enemy Check
+    auto deadenemy = EnemyDead.begin();
+    while (deadenemy != EnemyDead.end()) {
+        if (deadenemy->second > 7) {
+            deadenemy->first->bCanBeDeleted = true;
+            deadenemy = EnemyDead.erase(deadenemy);
+        } else {
+            ++deadenemy;
+        }
+    }
+
     // Player Moving Check
     if (GetAsyncKeyState(VK_UP)) {
         if (!GetAsyncKeyState(VK_DOWN)) {
@@ -72,22 +83,28 @@ void GameCheck() {
         Bullet *tmpBullet = (*it)->getBullet();
         if (!(*it)->isDead()) {
             // PlayerBullet To Enemy
-            for (auto itpl = tmpplayerbullet->ptPos.begin(); itpl != tmpplayerbullet->ptPos.end(); ++itpl) {
+            auto itpl = tmpplayerbullet->ptPos.begin();
+            while (itpl != tmpplayerbullet->ptPos.end()) {
                 if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y,
                         tmpplayerbullet->iWidth, tmpplayerbullet->iHeight)) {
-                    // MessageBox(hwnd, "attacked", "enemydead", MB_OK);
                     if ((*it)->getHealth() < player.BulletDamage) {
                         (*it)->changeDead();
+                        EnemyDead.push_back(std::make_pair(*it, 0));
                         break;
                     } else {
                         (*it)->changeHealth(-player.BulletDamage);
                     }
+                    itpl = tmpplayerbullet->ptPos.erase(itpl);
+                } else {
+                    ++itpl;
                 }
             }
             // Enemy To Player
             if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
                     player.iWidth - 40, player.iHeight - 40)) {
-                MessageBox(hwnd, "enemy", "playerdead", MB_OK);
+                fail = true;
+                running = false;
+                return;
             }
         } else {
             if (tmpBullet->ptPos.empty()) {
@@ -99,37 +116,14 @@ void GameCheck() {
         for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
             if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
                     player.iHeight - 40)) {
-                MessageBox(hwnd, "bulleted", "playerdead", MB_OK);
+                fail = true;
+                running = false;
+                return;
             }
         }
 
         ++it;
     }
-
-    /*
-    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-        Bullet *tmpBullet = (*it)->getBullet();
-        // PlayerBullet To Enemy
-        for (auto itpl = tmpplayerbullet->ptPos.begin(); itpl != tmpplayerbullet->ptPos.end(); ++itpl) {
-            if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y, tmpplayerbullet->iWidth,
-                    tmpplayerbullet->iHeight)) {
-                // MessageBox(hwnd, "attacked", "enemydead", MB_OK);
-            }
-        }
-        // EnemyBullet To Player
-        for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
-            if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
-                    player.iHeight - 40)) {
-                MessageBox(hwnd, "bulleted", "playerdead", MB_OK);
-            }
-        }
-        // Enemy To Player
-        if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy, player.iWidth - 40,
-                player.iHeight - 40)) {
-            MessageBox(hwnd, "enemy", "playerdead", MB_OK);
-        }
-    }
-    */
 
     // Player Bullet Spawn Check
     player.bulletMoving();
@@ -145,6 +139,7 @@ void GameCheck() {
         }
     }
 
+    /*  Òò²âÊÔ×¢ÊÍ
     // Enemy Bullet Spawn Check
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->bulletMoving();
@@ -159,9 +154,10 @@ void GameCheck() {
             }
         }
     }
+    */
 }
 
-void MyPaint(HDC hdc) {
+void GamePaint(HDC hdc) {
     HDC mdc = ciScreen.GetDC();
 
     // Draw Background
@@ -177,14 +173,24 @@ void MyPaint(HDC hdc) {
         (*it)->getBullet()->draw(mdc);
     }
 
-    // test
+    // Draw Enemy
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         if (!(*it)->isDead()) {
             (*it)->draw(mdc);
         }
     }
 
-    // Draw Entity
+    // Draw Break Effect
+    for (auto it = EnemyDead.begin(); it != EnemyDead.end(); ++it) {
+        if (it->second < 4) {
+            ciBreak.Draw(mdc, it->first->ix - 32, it->first->iy - 32, 64, 64, it->second * 64, 0, 64, 64);
+        } else {
+            ciBreak.Draw(mdc, it->first->ix - 32, it->first->iy - 32, 64, 64, (it->second % 4) * 64, 64, 64, 64);
+        }
+        ++(it->second);
+    }
+
+    // Draw Player
     player.draw(mdc);  // Last draw
     // ciEnemyBullet2.Draw(mdc, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
     //                    player.iRadius * 2, 0, 0, 16, 16);
@@ -194,4 +200,42 @@ void MyPaint(HDC hdc) {
     ciScreen.Draw(hdc, rect);
 
     tPre = GetTickCount64();
+}
+
+void MenuPaint(HDC hdc) {
+    HDC mdc = ciScreen.GetDC();
+    if (win) {
+        MessageBox(hwnd, "win", "win", MB_OK);
+        win = false;
+    } else if (fail) {
+        MessageBox(hwnd, "fail", "fail", MB_OK);
+        fail = false;
+    } else {
+        ciTitleBk0.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
+        if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 && iMy < 400 + ciGameStart.GetHeight()) {
+            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(),
+                             ciGameStart.GetWidth() / 2, 0, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
+        } else {
+            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(), 0, 0,
+                             ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
+        }
+    }
+
+    // Done
+    ciScreen.ReleaseDC();
+    ciScreen.Draw(hdc, rect);
+    tPre = GetTickCount64();
+}
+
+void MenuCheck() {
+    if (win || fail) {
+        // TODO
+    } else {
+        if (LBdown) {
+            if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 &&
+                iMy < 400 + ciGameStart.GetHeight()) {
+                running = true;
+            }
+        }
+    }
 }

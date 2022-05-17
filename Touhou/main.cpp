@@ -18,8 +18,11 @@ ULONGLONG tPre, tNow;
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk, ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet;
-CImage ciEnemy2, ciEnemyBullet2;
+CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak;
+CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
+
+// Game Control
+bool running = false, win = false, fail = false;
 
 // Entity Control
 Player player;
@@ -45,8 +48,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         } else {
             tNow = GetTickCount64();
             if (tNow - tPre >= 17) {
-                GameCheck();
-                MyPaint(hdc);
+                if (running) {
+                    GamePaint(hdc);
+                    GameCheck();
+                } else {
+                    MenuPaint(hdc);
+                    MenuCheck();
+                }
             }
         }
     }
@@ -107,7 +115,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     // resources load
     CString csBkBlock = "resources/background.png";
     CString csPlayer = "resources/pl00.png";
+    CString csTitleBk0 = "resources/title_bk00.png";
     CString csTitleBk = "resources/title_bk01.png";
+    CString csGameStart = "resources/GameStart.png";
+    CString csBreak = "resources/etbreak.png";
     CString csPlayerBullet = "resources/pl00bullet.png";
     CString csEnemy1 = "resources/enemy1.png";
     CString csEnemyBullet = "resources/bullet1.png";
@@ -116,7 +127,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 
     LoadImg(ciBkBlock, csBkBlock);
     LoadImg(ciPlayer, csPlayer);
+    LoadImg(ciTitleBk0, csTitleBk0);
     LoadImg(ciTitleBk, csTitleBk);
+    LoadImg(ciGameStart, csGameStart);
+    LoadImg(ciBreak, csBreak);
     LoadImg(ciPlayerBullet, csPlayerBullet);
     LoadImg(ciEnemy1, csEnemy1);
     LoadImg(ciEnemyBullet, csEnemyBullet);
@@ -142,7 +156,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     e2->xySet(200, 200);
     EnemyExists.push_back(e2);
 
-    MyPaint(hdc);
+    // GamePaint(hdc);
 
     return TRUE;
 }
