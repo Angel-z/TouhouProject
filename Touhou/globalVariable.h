@@ -11,8 +11,9 @@ extern ULONGLONG tPre, tNow;
 constexpr int ZOOM = 2;
 constexpr int GWidth = 730;
 constexpr int GHeight = 768;
-constexpr int iPlayerSpeed = 15;
+// constexpr int iPlayerSpeed = 15;
 constexpr int iBulletSpeed = 35;
+constexpr int iEnemyBulletSpeed = 5;
 constexpr int iMaxBulletDamage = 400;
 
 extern CImage ciScreen;
@@ -33,7 +34,9 @@ extern std::vector<std::pair<Entity *, int>> EnemyDead;
 extern bool running, win, fail;
 
 // Player Acting
+extern int iPlayerSpeed;
 extern bool bPLeft, bPRight, bPUp, bPDown;
+extern bool bShift;
 
 // Mouse Check
 extern int iMx, iMy;

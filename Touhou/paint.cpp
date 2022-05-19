@@ -100,11 +100,20 @@ void GameCheck() {
                 }
             }
             // Enemy To Player
-            if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
-                    player.iWidth - 40, player.iHeight - 40)) {
-                fail = true;
-                running = false;
-                return;
+            if (bShift) {
+                if (C2R(player.ix, player.iy, player.iRadius, (*it)->ix, (*it)->iy, (*it)->iWidth - 30,
+                        (*it)->iHeight - 20)) {
+                    fail = true;
+                    running = false;
+                    return;
+                }
+            } else {
+                if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
+                        player.iWidth - 40, player.iHeight - 40)) {
+                    fail = true;
+                    running = false;
+                    return;
+                }
             }
         } else {
             if (tmpBullet->ptPos.empty()) {
@@ -113,12 +122,22 @@ void GameCheck() {
             }
         }
         // EnemyBullet To Player
-        for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
-            if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
-                    player.iHeight - 40)) {
-                fail = true;
-                running = false;
-                return;
+        if (bShift) {
+            for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
+                if (C2C(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iRadius)) {
+                    fail = true;
+                    running = false;
+                    return;
+                }
+            }
+        } else {
+            for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
+                if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
+                        player.iHeight - 40)) {
+                    fail = true;
+                    running = false;
+                    return;
+                }
             }
         }
 
@@ -139,7 +158,7 @@ void GameCheck() {
         }
     }
 
-    /*  Òò²âÊÔ×¢ÊÍ
+    /*  Òò²âÊÔ×¢ÊÍ */
     // Enemy Bullet Spawn Check
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->bulletMoving();
@@ -154,7 +173,6 @@ void GameCheck() {
             }
         }
     }
-    */
 }
 
 void GamePaint(HDC hdc) {
@@ -166,12 +184,6 @@ void GamePaint(HDC hdc) {
     ciBackground.Draw(mdc, 0, 0, ciBackground.GetWidth(), iBackgroundOff, 0, ciScreen.GetHeight() - iBackgroundOff,
                       ciBackground.GetWidth(), iBackgroundOff);
     iBackgroundOff = (iBackgroundOff + 8) % GHeight;
-
-    // Draw Bullet
-    player.BulletPlayer.draw(mdc);
-    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-        (*it)->getBullet()->draw(mdc);
-    }
 
     // Draw Enemy
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
@@ -190,10 +202,20 @@ void GamePaint(HDC hdc) {
         ++(it->second);
     }
 
+    // Draw Player Bullet
+    player.BulletPlayer.draw(mdc);
+
     // Draw Player
     player.draw(mdc);  // Last draw
-    // ciEnemyBullet2.Draw(mdc, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
-    //                    player.iRadius * 2, 0, 0, 16, 16);
+    if (bShift) {
+        ciEnemyBullet2.Draw(mdc, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
+                            player.iRadius * 2, 0, 0, 16, 16);
+    }
+
+    // Draw Enemy Bullet
+    for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
+        (*it)->getBullet()->draw(mdc);
+    }
 
     // Done
     ciScreen.ReleaseDC();
@@ -206,10 +228,10 @@ void MenuPaint(HDC hdc) {
     HDC mdc = ciScreen.GetDC();
     if (win) {
         MessageBox(hwnd, "win", "win", MB_OK);
-        win = false;
+        win = false;  // test
     } else if (fail) {
         MessageBox(hwnd, "fail", "fail", MB_OK);
-        fail = false;
+        fail = false;  // test
     } else {
         ciTitleBk0.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
         if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 && iMy < 400 + ciGameStart.GetHeight()) {

@@ -5,13 +5,21 @@
 #include "tools.h"
 
 int iMx, iMy;
-bool LBdown = false;
+bool LBdown = false, bShift = false;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_KEYDOWN: {
+            if (wParam == VK_SHIFT) {
+                bShift = true;
+                iPlayerSpeed = 7;
+            }
         } break;
         case WM_KEYUP: {
+            if (wParam == VK_SHIFT) {
+                bShift = false;
+                iPlayerSpeed = 15;
+            }
             // test to pause
             if (wParam == 'P') {
                 running = !running;

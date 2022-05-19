@@ -30,6 +30,7 @@ std::vector<Entity *> EnemyExists;
 std::vector<std::pair<Entity *, int>> EnemyDead;
 
 int iBackgroundOff = 1;
+int iPlayerSpeed = 15;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PSTR szCmdLine, _In_ int iCmdShow) {
     MSG msg;

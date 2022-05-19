@@ -74,7 +74,7 @@ void Bullet::draw(HDC hdc) {
 // Player
 CImage &Player::ci = ciPlayer;
 
-Player::Player() : Entity(0, 0, 32, 48, 5), BulletPlayer(ciPlayerBullet, 10, 15, 70, 0) {
+Player::Player() : Entity(0, 0, 32, 48, 3), BulletPlayer(ciPlayerBullet, 10, 15, 70, 0) {
     ix = GWidth / 2 - iWidth / 2;
     iy = GHeight - iHeight + iHeight / 2;
     ptLeftTop.x = ix - iWidth / 2;
@@ -158,7 +158,7 @@ void Player::bulletMoving() {
 // Enemy1
 CImage &Enemy1::ci = ciEnemy1;
 
-Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 500, 8) {
+Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 700, 8) {
     iHealth = 800;
     bDead = false;
 }
@@ -188,8 +188,8 @@ void Enemy1::bulletSpawn() {
 void Enemy1::bulletMoving() {
     auto it = BulletEnemy.ptPos.begin();
     while (it < BulletEnemy.ptPos.end()) {
-        if (it->y + (iBulletSpeed - 25) < BulletEnemy.iHeight + GHeight) {
-            it->y += (iBulletSpeed - 25);
+        if (it->y + iEnemyBulletSpeed < BulletEnemy.iHeight + GHeight) {
+            it->y += iEnemyBulletSpeed;
             ++it;
         } else {
             it = BulletEnemy.ptPos.erase(it);
@@ -216,7 +216,7 @@ void Enemy1::changeHealth(int health) {
 // Enemy2
 CImage &Enemy2::ci = ciEnemy2;
 
-Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 500, 8) {
+Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 700, 8) {
     iHealth = 800;
     bDead = false;
 }
@@ -246,8 +246,8 @@ void Enemy2::bulletSpawn() {
 void Enemy2::bulletMoving() {
     auto it = BulletEnemy.ptPos.begin();
     while (it < BulletEnemy.ptPos.end()) {
-        if (it->y + (iBulletSpeed - 25) < BulletEnemy.iHeight + GHeight) {
-            it->y += (iBulletSpeed - 25);
+        if (it->y + iEnemyBulletSpeed < BulletEnemy.iHeight + GHeight) {
+            it->y += iEnemyBulletSpeed;
             ++it;
         } else {
             it = BulletEnemy.ptPos.erase(it);
