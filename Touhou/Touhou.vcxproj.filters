@@ -30,6 +30,9 @@
     <ClCompile Include="entity.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="progress.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tools.h">

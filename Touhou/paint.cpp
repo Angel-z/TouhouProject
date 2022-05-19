@@ -1,6 +1,5 @@
 #include <Windows.h>
 #include <atlimage.h>
-#include <math.h>
 
 #include "entity.h"
 #include "globalVariable.h"
@@ -87,7 +86,7 @@ void GameCheck() {
             while (itpl != tmpplayerbullet->ptPos.end()) {
                 if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight, itpl->x, itpl->y,
                         tmpplayerbullet->iWidth, tmpplayerbullet->iHeight)) {
-                    if ((*it)->getHealth() < player.BulletDamage) {
+                    if ((*it)->getHealth() <= player.BulletDamage) {
                         (*it)->changeDead();
                         EnemyDead.push_back(std::make_pair(*it, 0));
                         break;
@@ -116,7 +115,7 @@ void GameCheck() {
                 }
             }
         } else {
-            if (tmpBullet->ptPos.empty()) {
+            if (tmpBullet->ptPos.empty() && (*it)->bCanBeDeleted) {
                 it = EnemyExists.erase(it);
                 continue;
             }
@@ -180,42 +179,52 @@ void GamePaint(HDC hdc) {
 
     // Draw Background
     ciTitleBk.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
-    ciBackground.Draw(mdc, 0, iBackgroundOff);
-    ciBackground.Draw(mdc, 0, 0, ciBackground.GetWidth(), iBackgroundOff, 0, ciScreen.GetHeight() - iBackgroundOff,
-                      ciBackground.GetWidth(), iBackgroundOff);
+
+    // Draw LeftPanel
+    HDC leftpanel = ciLeftPanel.GetDC();
+    ciBackground.Draw(leftpanel, 0, iBackgroundOff);
+    ciBackground.Draw(leftpanel, 0, 0, ciBackground.GetWidth(), iBackgroundOff, 0,
+                      ciScreen.GetHeight() - iBackgroundOff, ciBackground.GetWidth(), iBackgroundOff);
     iBackgroundOff = (iBackgroundOff + 8) % GHeight;
 
     // Draw Enemy
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         if (!(*it)->isDead()) {
-            (*it)->draw(mdc);
+            (*it)->draw(leftpanel);
         }
     }
 
     // Draw Break Effect
     for (auto it = EnemyDead.begin(); it != EnemyDead.end(); ++it) {
         if (it->second < 4) {
-            ciBreak.Draw(mdc, it->first->ix - 32, it->first->iy - 32, 64, 64, it->second * 64, 0, 64, 64);
+            ciBreak.Draw(leftpanel, it->first->ix - 32, it->first->iy - 32, 64, 64, it->second * 64, 0, 64, 64);
         } else {
-            ciBreak.Draw(mdc, it->first->ix - 32, it->first->iy - 32, 64, 64, (it->second % 4) * 64, 64, 64, 64);
+            ciBreak.Draw(leftpanel, it->first->ix - 32, it->first->iy - 32, 64, 64, (it->second % 4) * 64, 64, 64, 64);
         }
         ++(it->second);
     }
 
     // Draw Player Bullet
-    player.BulletPlayer.draw(mdc);
+    player.BulletPlayer.draw(leftpanel);
 
     // Draw Player
-    player.draw(mdc);  // Last draw
+    player.draw(leftpanel);  // Last draw
     if (bShift) {
-        ciEnemyBullet2.Draw(mdc, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
+        ciEnemyBullet2.Draw(leftpanel, player.ix - player.iRadius, player.iy - player.iRadius, player.iRadius * 2,
                             player.iRadius * 2, 0, 0, 16, 16);
     }
 
     // Draw Enemy Bullet
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-        (*it)->getBullet()->draw(mdc);
+        (*it)->getBullet()->draw(leftpanel);
     }
+
+    // LeftPanel Done
+    ciLeftPanel.ReleaseDC();
+    ciLeftPanel.Draw(mdc, 0, 0);
+
+    // Draw RightPanel;
+    // TODO
 
     // Done
     ciScreen.ReleaseDC();
@@ -257,6 +266,8 @@ void MenuCheck() {
             if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 &&
                 iMy < 400 + ciGameStart.GetHeight()) {
                 running = true;
+                tGameStart = GetTickCount64();
+                stage1ini = true;
             }
         }
     }

@@ -142,6 +142,7 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="paint.cpp" />
+    <ClCompile Include="progress.cpp" />
     <ClCompile Include="response.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>

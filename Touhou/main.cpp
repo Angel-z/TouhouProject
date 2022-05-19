@@ -18,7 +18,7 @@ ULONGLONG tPre, tNow;
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak;
+CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel;
 CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
 // Game Control
@@ -50,6 +50,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
             tNow = GetTickCount64();
             if (tNow - tPre >= 17) {
                 if (running) {
+                    GameProgress();
                     GamePaint(hdc);
                     GameCheck();
                 } else {
@@ -138,6 +139,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     LoadImg(ciEnemy2, csEnemy2);
     LoadImg(ciEnemyBullet2, csEnemyBullet2);
 
+    ciLeftPanel.Create(GWidth, GHeight, 32);
     ciBackground.Create(GWidth, 1024, 32);
 
     HDC hDcBackground = ciBackground.GetDC();
@@ -150,12 +152,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     ciBackground.ReleaseDC();
 
     // test
-    Enemy1 *e1 = new Enemy1();
-    e1->xySet(100, 100);
-    EnemyExists.push_back(e1);
-    Enemy2 *e2 = new Enemy2();
-    e2->xySet(200, 200);
-    EnemyExists.push_back(e2);
+    // Enemy1 *e1 = new Enemy1();
+    // e1->xySet(100, 100);
+    // EnemyExists.push_back(e1);
+    // Enemy2 *e2 = new Enemy2();
+    // e2->xySet(200, 200);
+    // EnemyExists.push_back(e2);
 
     // GamePaint(hdc);
 

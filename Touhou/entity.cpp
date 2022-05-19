@@ -74,7 +74,7 @@ void Bullet::draw(HDC hdc) {
 // Player
 CImage &Player::ci = ciPlayer;
 
-Player::Player() : Entity(0, 0, 32, 48, 3), BulletPlayer(ciPlayerBullet, 10, 15, 70, 0) {
+Player::Player() : Entity(0, 0, 32, 48, 2), BulletPlayer(ciPlayerBullet, 10, 15, 60, 0) {
     ix = GWidth / 2 - iWidth / 2;
     iy = GHeight - iHeight + iHeight / 2;
     ptLeftTop.x = ix - iWidth / 2;
@@ -159,7 +159,7 @@ void Player::bulletMoving() {
 CImage &Enemy1::ci = ciEnemy1;
 
 Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 700, 8) {
-    iHealth = 800;
+    iHealth = 400;
     bDead = false;
 }
 
@@ -217,7 +217,7 @@ void Enemy1::changeHealth(int health) {
 CImage &Enemy2::ci = ciEnemy2;
 
 Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 700, 8) {
-    iHealth = 800;
+    iHealth = 400;
     bDead = false;
 }
 
