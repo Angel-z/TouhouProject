@@ -33,6 +33,8 @@ class Entity {
     virtual void changeDead();
     virtual int getHealth();
     virtual void changeHealth(int health);
+    virtual void changeDir(int _dir);
+    virtual int getDir();
 
     void xChange(int x);
     void yChange(int y);
@@ -81,6 +83,7 @@ class Enemy1 : public Entity {
 
     int iHealth;
     bool bDead;
+    int dir;
 
     Bullet BulletEnemy;
 
@@ -96,6 +99,8 @@ class Enemy1 : public Entity {
     void changeDead() override;
     int getHealth() override;
     void changeHealth(int health) override;
+    void changeDir(int _dir) override;
+    int getDir() override;
 };
 
 class Enemy2 : public Entity {
@@ -104,6 +109,7 @@ class Enemy2 : public Entity {
 
     int iHealth;
     bool bDead;
+    int dir;
 
     Bullet BulletEnemy;
 
@@ -119,4 +125,6 @@ class Enemy2 : public Entity {
     void changeDead() override;
     int getHealth() override;
     void changeHealth(int health) override;
+    void changeDir(int _dir) override;
+    int getDir() override;
 };

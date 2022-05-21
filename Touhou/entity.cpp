@@ -40,6 +40,12 @@ int Entity::getHealth() {
 
 void Entity::changeHealth(int health) {}
 
+void Entity::changeDir(int _dir) {}
+
+int Entity::getDir() {
+    return -1;
+}
+
 void Entity::xChange(int x) {
     ix += x;
     ptLeftTop.x += x;
@@ -76,7 +82,7 @@ CImage &Player::ci = ciPlayer;
 
 Player::Player() : Entity(0, 0, 32, 48, 2), BulletPlayer(ciPlayerBullet, 10, 15, 60, 0) {
     ix = GWidth / 2 - iWidth / 2;
-    iy = GHeight - iHeight + iHeight / 2;
+    iy = GHeight - iHeight / 2;
     ptLeftTop.x = ix - iWidth / 2;
     ptLeftTop.y = iy - iHeight / 2;
 
@@ -161,6 +167,7 @@ CImage &Enemy1::ci = ciEnemy1;
 Enemy1::Enemy1() : Entity(0, 0, 40, 30, 15), BulletEnemy(ciEnemyBullet, 16, 16, 700, 8) {
     iHealth = 400;
     bDead = false;
+    dir = -1;
 }
 
 void Enemy1::draw(HDC hdc) {
@@ -213,12 +220,21 @@ void Enemy1::changeHealth(int health) {
     iHealth += health;
 }
 
+void Enemy1::changeDir(int _dir) {
+    dir = _dir;
+}
+
+int Enemy1::getDir() {
+    return dir;
+}
+
 // Enemy2
 CImage &Enemy2::ci = ciEnemy2;
 
 Enemy2::Enemy2() : Entity(0, 0, 40, 30, 0), BulletEnemy(ciEnemyBullet2, 16, 16, 700, 8) {
     iHealth = 400;
     bDead = false;
+    dir = -1;
 }
 
 void Enemy2::draw(HDC hdc) {
@@ -269,4 +285,12 @@ int Enemy2::getHealth() {
 
 void Enemy2::changeHealth(int health) {
     iHealth += health;
+}
+
+void Enemy2::changeDir(int _dir) {
+    dir = _dir;
+}
+
+int Enemy2::getDir() {
+    return dir;
 }

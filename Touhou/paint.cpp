@@ -7,6 +7,8 @@
 
 bool bPLeft = false, bPRight = false, bPUp = false, bPDown = false;
 
+void DrawLeftPanel(HDC mdc);
+
 void GameCheck() {
     // Dead Enemy Check
     auto deadenemy = EnemyDead.begin();
@@ -103,6 +105,7 @@ void GameCheck() {
                 if (C2R(player.ix, player.iy, player.iRadius, (*it)->ix, (*it)->iy, (*it)->iWidth - 30,
                         (*it)->iHeight - 20)) {
                     fail = true;
+                    win = false;
                     running = false;
                     return;
                 }
@@ -110,6 +113,7 @@ void GameCheck() {
                 if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
                         player.iWidth - 40, player.iHeight - 40)) {
                     fail = true;
+                    win = false;
                     running = false;
                     return;
                 }
@@ -120,6 +124,8 @@ void GameCheck() {
                 continue;
             }
         }
+
+        /*
         // EnemyBullet To Player
         if (bShift) {
             for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
@@ -139,6 +145,7 @@ void GameCheck() {
                 }
             }
         }
+        */
 
         ++it;
     }
@@ -180,6 +187,78 @@ void GamePaint(HDC hdc) {
     // Draw Background
     ciTitleBk.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
 
+    // Draw LeftPanem
+    DrawLeftPanel(mdc);
+
+    // Draw RightPanel
+    // TODO
+
+    // Done
+    ciScreen.ReleaseDC();
+    ciScreen.Draw(hdc, rect);
+
+    tPre = GetTickCount64();
+}
+
+void MenuPaint(HDC hdc) {
+    HDC mdc = ciScreen.GetDC();
+    if (win || fail) {
+        // Draw Background
+        ciTitleBk.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
+        // Draw LeftPanem
+        DrawLeftPanel(mdc);
+
+        if (fail) {
+            ciFail.Draw(mdc, GWidth / 2 - ciFail.GetWidth() * ZOOM / 2, 100, ciFail.GetWidth() * ZOOM,
+                        ciFail.GetHeight() * ZOOM);
+        } else {
+            ciWin.Draw(mdc, GWidth / 2 - ciWin.GetWidth() / 2, 100, ciWin.GetWidth(), ciWin.GetHeight());
+        }
+
+        ciRetry.Draw(mdc, GWidth / 2 - ciRetry.GetWidth() / 2, GHeight / 2 - ciRetry.GetHeight() / 2,
+                     ciRetry.GetWidth(), ciRetry.GetHeight());
+    } else {
+        ciTitleBk0.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
+        if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 && iMy < 400 + ciGameStart.GetHeight()) {
+            SetCursor(::LoadCursor(nullptr, IDC_HAND));
+            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(),
+                             ciGameStart.GetWidth() / 2, 0, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
+        } else {
+            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(), 0, 0,
+                             ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
+        }
+    }
+
+    // Done
+    ciScreen.ReleaseDC();
+    ciScreen.Draw(hdc, rect);
+    tPre = GetTickCount64();
+}
+
+void MenuCheck() {
+    if (win || fail) {
+        if (LBdown) {
+            if (iMx > GWidth / 2 - ciRetry.GetWidth() / 2 && iMx < GWidth / 2 + ciRetry.GetWidth() / 2 &&
+                iMy > GHeight / 2 - ciRetry.GetHeight() / 2 && iMy < GHeight / 2 + ciRetry.GetHeight() / 2) {
+                running = true;
+                GameTurn = 0;
+                stage1ini = true;
+            }
+        }
+    } else {
+        if (LBdown) {
+            if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 &&
+                iMy < 400 + ciGameStart.GetHeight()) {
+                running = true;
+                GameTurn = 0;
+                stage1ini = true;
+            }
+        }
+    }
+}
+
+// Draw Panel
+void DrawLeftPanel(HDC mdc) {
     // Draw LeftPanel
     HDC leftpanel = ciLeftPanel.GetDC();
     ciBackground.Draw(leftpanel, 0, iBackgroundOff);
@@ -222,53 +301,4 @@ void GamePaint(HDC hdc) {
     // LeftPanel Done
     ciLeftPanel.ReleaseDC();
     ciLeftPanel.Draw(mdc, 0, 0);
-
-    // Draw RightPanel;
-    // TODO
-
-    // Done
-    ciScreen.ReleaseDC();
-    ciScreen.Draw(hdc, rect);
-
-    tPre = GetTickCount64();
-}
-
-void MenuPaint(HDC hdc) {
-    HDC mdc = ciScreen.GetDC();
-    if (win) {
-        MessageBox(hwnd, "win", "win", MB_OK);
-        win = false;  // test
-    } else if (fail) {
-        MessageBox(hwnd, "fail", "fail", MB_OK);
-        fail = false;  // test
-    } else {
-        ciTitleBk0.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
-        if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 && iMy < 400 + ciGameStart.GetHeight()) {
-            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(),
-                             ciGameStart.GetWidth() / 2, 0, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
-        } else {
-            ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(), 0, 0,
-                             ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
-        }
-    }
-
-    // Done
-    ciScreen.ReleaseDC();
-    ciScreen.Draw(hdc, rect);
-    tPre = GetTickCount64();
-}
-
-void MenuCheck() {
-    if (win || fail) {
-        // TODO
-    } else {
-        if (LBdown) {
-            if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 &&
-                iMy < 400 + ciGameStart.GetHeight()) {
-                running = true;
-                tGameStart = GetTickCount64();
-                stage1ini = true;
-            }
-        }
-    }
 }
