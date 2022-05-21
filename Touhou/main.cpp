@@ -18,7 +18,8 @@ ULONGLONG tPre, tNow;
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciWin, ciFail, ciRetry;
+CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciWin, ciFail, ciRetry,
+    ciTitle;
 CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
 // Game Control
@@ -129,6 +130,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     CString csWin = "resources/win.png";
     CString csFail = "resources/fail.png";
     CString csRetry = "resources/retry.png";
+    CString csTitle = "resources/title.png";
 
     LoadImg(ciBkBlock, csBkBlock);
     LoadImg(ciPlayer, csPlayer);
@@ -144,6 +146,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     LoadImg(ciWin, csWin);
     LoadImg(ciFail, csFail);
     LoadImg(ciRetry, csRetry);
+    LoadImg(ciTitle, csTitle);
 
     ciLeftPanel.Create(GWidth, GHeight, 32);
     ciBackground.Create(GWidth, 1024, 32);

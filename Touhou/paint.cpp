@@ -219,6 +219,7 @@ void MenuPaint(HDC hdc) {
                      ciRetry.GetWidth(), ciRetry.GetHeight());
     } else {
         ciTitleBk0.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
+        ciTitle.Draw(mdc, 30, 30);
         if (iMx > 50 && iMx < -50 + ciGameStart.GetWidth() / 2 && iMy > 400 && iMy < 400 + ciGameStart.GetHeight()) {
             SetCursor(::LoadCursor(nullptr, IDC_HAND));
             ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(),
