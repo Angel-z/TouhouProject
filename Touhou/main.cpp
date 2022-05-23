@@ -12,14 +12,15 @@ BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 HDC hdc;
+HFONT normalFont;
 HWND hwnd;
 ULONGLONG tPre, tNow;
 
 CImage ciScreen;
 RECT rect;
 
-CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciWin, ciFail, ciRetry,
-    ciTitle;
+CImage ciBkBlock, ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciRightPanel, ciWin, ciFail,
+    ciRetry, ciTitle;
 CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
 // Game Control
@@ -29,6 +30,8 @@ bool running = false, win = false, fail = false;
 Player player;
 std::vector<Entity *> EnemyExists;
 std::vector<std::pair<Entity *, int>> EnemyDead;
+
+unsigned long score = 0;
 
 int iBackgroundOff = 1;
 int iPlayerSpeed = 15;
@@ -149,6 +152,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     LoadImg(ciTitle, csTitle);
 
     ciLeftPanel.Create(GWidth, GHeight, 32);
+    ciRightPanel.Create(rect.right - GWidth, GHeight, 32);
     ciBackground.Create(GWidth, 1024, 32);
 
     HDC hDcBackground = ciBackground.GetDC();
@@ -160,15 +164,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     ciBkBlock.Destroy();
     ciBackground.ReleaseDC();
 
-    // test
-    // Enemy1 *e1 = new Enemy1();
-    // e1->xySet(100, 100);
-    // EnemyExists.push_back(e1);
-    // Enemy2 *e2 = new Enemy2();
-    // e2->xySet(200, 200);
-    // EnemyExists.push_back(e2);
+    // Font
 
-    // GamePaint(hdc);
+    normalFont = CreateFont(45, 32, 0, 0, FW_MEDIUM, false, false, false, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+                            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, "normal");
 
     return TRUE;
 }

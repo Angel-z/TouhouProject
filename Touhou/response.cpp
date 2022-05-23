@@ -20,10 +20,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 bShift = false;
                 iPlayerSpeed = 15;
             }
-            // test to pause
-            if (wParam == 'P') {
-                running = !running;
-            }
         } break;
         case WM_MOUSEMOVE: {
             iMx = LOWORD(lParam);
@@ -36,12 +32,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
             LBdown = false;
         } break;
         case WM_DESTROY:
+            ReleaseDC(hwnd, hdc);
             ciScreen.Destroy();
             ciBackground.Destroy();
             ciPlayer.Destroy();
             ciTitleBk.Destroy();
             ciPlayerBullet.Destroy();
-            ReleaseDC(hwnd, hdc);
             PostQuitMessage(0);
             break;
         default:

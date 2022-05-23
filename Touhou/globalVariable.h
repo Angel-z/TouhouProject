@@ -5,6 +5,7 @@
 #include "entity.h"
 
 extern HDC hdc;
+extern HFONT normalFont;
 extern HWND hwnd;
 extern ULONGLONG tPre, tNow;
 
@@ -21,13 +22,16 @@ extern RECT rect;
 extern int iBackgroundOff;
 
 // Sources
-extern CImage ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciWin, ciFail, ciRetry, ciTitle;
+extern CImage ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciRightPanel, ciWin, ciFail,
+    ciRetry, ciTitle;
 extern CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
 // Entity Control
 extern Player player;
 extern std::vector<Entity *> EnemyExists;
 extern std::vector<std::pair<Entity *, int>> EnemyDead;
+
+extern unsigned long score;
 
 // Game Control
 extern bool running, win, fail;

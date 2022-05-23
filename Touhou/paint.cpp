@@ -8,6 +8,7 @@
 bool bPLeft = false, bPRight = false, bPUp = false, bPDown = false;
 
 void DrawLeftPanel(HDC mdc);
+void DrawRightPanel(HDC mdc);
 
 void GameCheck() {
     // Dead Enemy Check
@@ -90,6 +91,7 @@ void GameCheck() {
                         tmpplayerbullet->iWidth, tmpplayerbullet->iHeight)) {
                     if ((*it)->getHealth() <= player.BulletDamage) {
                         (*it)->changeDead();
+                        score += 1000;
                         EnemyDead.push_back(std::make_pair(*it, 0));
                         break;
                     } else {
@@ -184,13 +186,11 @@ void GameCheck() {
 void GamePaint(HDC hdc) {
     HDC mdc = ciScreen.GetDC();
 
-    // Draw Background
-    ciTitleBk.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
-
     // Draw LeftPanem
     DrawLeftPanel(mdc);
 
     // Draw RightPanel
+    DrawRightPanel(mdc);
     // TODO
 
     // Done
@@ -302,4 +302,28 @@ void DrawLeftPanel(HDC mdc) {
     // LeftPanel Done
     ciLeftPanel.ReleaseDC();
     ciLeftPanel.Draw(mdc, 0, 0);
+}
+
+void DrawRightPanel(HDC mdc) {
+    HDC rightpanel = ciRightPanel.GetDC();
+    SetBkMode(rightpanel, TRANSPARENT);
+    SelectObject(rightpanel, normalFont);
+
+    // Draw BackGround
+    ciTitleBk.Draw(rightpanel, 0, 0, ciRightPanel.GetWidth(), ciRightPanel.GetHeight(),
+                   ciTitleBk.GetWidth() - ciRightPanel.GetWidth(), 0, ciRightPanel.GetWidth(), ciTitleBk.GetHeight());
+
+    // Draw Text
+    CString cscore, cst;
+    cst.Format("SCORE");
+    cscore.Format("%06d", score);
+    SIZE csize;
+    GetTextExtentPoint32(rightpanel, cst, cst.GetLength(), &csize);
+    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 100, cst, cst.GetLength());
+    GetTextExtentPoint32(rightpanel, cscore, cscore.GetLength(), &csize);
+    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 150, cscore, cscore.GetLength());
+    DeleteObject(normalFont);
+
+    ciRightPanel.ReleaseDC();
+    ciRightPanel.Draw(mdc, GWidth, 0);
 }

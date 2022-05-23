@@ -16,7 +16,7 @@ enum class Dir { Left = 0, Right, Up, Down, Stop = -1 };
 void GameProgress() {
     if (GameTurn <= Stage1_Loop) {
         if (stage1ini) {
-            // TODO
+            score = 0;
             EnemyExists.clear();
             for (auto it = WaitToDelete.begin(); it != WaitToDelete.end(); ++it) {
                 delete (*it);
@@ -51,11 +51,12 @@ void GameProgress() {
                     EnemyExists.push_back(tmp2);
                 }
             } else {
+                int EnemySpeed = 9;
                 for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-                    if ((*it)->ptLeftTop.x + 9 > GWidth) {
+                    if ((*it)->ptLeftTop.x + EnemySpeed > GWidth) {
                         (*it)->xySet(-(*it)->iWidth / 2, (*it)->iy);
                     } else {
-                        (*it)->xChange(9);
+                        (*it)->xChange(EnemySpeed);
                     }
                 }
             }
@@ -100,11 +101,12 @@ void GameProgress() {
                 stage2_1 = true;
             } else {
                 if (stage2_1) {
+                    int EnemySpeed = 10;
                     if (EnemyExists[0]->ix > 150) {
                         stage2_1 = false;
                     } else {
                         for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
-                            (*it)->xChange(10);
+                            (*it)->xChange(EnemySpeed);
                         }
                     }
                 } else {
