@@ -31,15 +31,31 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
         case WM_LBUTTONUP: {
             LBdown = false;
         } break;
-        case WM_DESTROY:
+        case WM_DESTROY: {
             ReleaseDC(hwnd, hdc);
             ciScreen.Destroy();
             ciBackground.Destroy();
-            ciPlayer.Destroy();
+            ciTitleBk0.Destroy();
             ciTitleBk.Destroy();
+            ciGameStart.Destroy();
+            ciBreak.Destroy();
+            ciLeftPanel.Destroy();
+            ciRightPanel.Destroy();
+            ciWin.Destroy();
+            ciFail.Destroy();
+            ciRetry.Destroy();
+            ciTitle.Destroy();
+            ciCharactor.Destroy();
+            ciPlayer.Destroy();
             ciPlayerBullet.Destroy();
+            ciEnemy1.Destroy();
+            ciEnemyBullet.Destroy();
+            ciEnemy2.Destroy();
+            ciEnemyBullet2.Destroy();
+            DeleteObject(normalFont);
+
             PostQuitMessage(0);
-            break;
+        } break;
         default:
             return DefWindowProc(hwnd, message, wParam, lParam);
             break;

@@ -194,7 +194,7 @@ void Enemy1::bulletSpawn() {
 
 void Enemy1::bulletMoving() {
     auto it = BulletEnemy.ptPos.begin();
-    while (it < BulletEnemy.ptPos.end()) {
+    while (it != BulletEnemy.ptPos.end()) {
         if (it->y + iEnemyBulletSpeed < BulletEnemy.iHeight + GHeight) {
             it->y += iEnemyBulletSpeed;
             ++it;
@@ -261,7 +261,7 @@ void Enemy2::bulletSpawn() {
 
 void Enemy2::bulletMoving() {
     auto it = BulletEnemy.ptPos.begin();
-    while (it < BulletEnemy.ptPos.end()) {
+    while (it != BulletEnemy.ptPos.end()) {
         if (it->y + iEnemyBulletSpeed < BulletEnemy.iHeight + GHeight) {
             it->y += iEnemyBulletSpeed;
             ++it;

@@ -23,7 +23,7 @@ extern int iBackgroundOff;
 
 // Sources
 extern CImage ciBackground, ciTitleBk0, ciTitleBk, ciGameStart, ciBreak, ciLeftPanel, ciRightPanel, ciWin, ciFail,
-    ciRetry, ciTitle;
+    ciRetry, ciTitle, ciCharactor;
 extern CImage ciPlayer, ciPlayerBullet, ciEnemy1, ciEnemyBullet, ciEnemy2, ciEnemyBullet2;
 
 // Entity Control

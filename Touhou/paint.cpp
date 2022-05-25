@@ -127,7 +127,6 @@ void GameCheck() {
             }
         }
 
-        /*
         // EnemyBullet To Player
         if (bShift) {
             for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
@@ -147,7 +146,6 @@ void GameCheck() {
                 }
             }
         }
-        */
 
         ++it;
     }
@@ -166,7 +164,6 @@ void GameCheck() {
         }
     }
 
-    /*  Òò²âÊÔ×¢ÊÍ */
     // Enemy Bullet Spawn Check
     for (auto it = EnemyExists.begin(); it != EnemyExists.end(); ++it) {
         (*it)->bulletMoving();
@@ -185,13 +182,14 @@ void GameCheck() {
 
 void GamePaint(HDC hdc) {
     HDC mdc = ciScreen.GetDC();
+    SetStretchBltMode(mdc, HALFTONE);
+    SetBrushOrgEx(mdc, 0, 0, NULL);
 
     // Draw LeftPanem
     DrawLeftPanel(mdc);
 
     // Draw RightPanel
     DrawRightPanel(mdc);
-    // TODO
 
     // Done
     ciScreen.ReleaseDC();
@@ -202,12 +200,16 @@ void GamePaint(HDC hdc) {
 
 void MenuPaint(HDC hdc) {
     HDC mdc = ciScreen.GetDC();
+    SetStretchBltMode(mdc, HALFTONE);
+    SetBrushOrgEx(mdc, 0, 0, NULL);
+
     if (win || fail) {
         // Draw Background
         ciTitleBk.Draw(mdc, 0, 0, 1024, 768, 0, 0, ciTitleBk.GetWidth(), ciTitleBk.GetHeight());
-        // Draw LeftPanem
+        // Draw LeftPanel
         DrawLeftPanel(mdc);
-
+        // Draw RightPanel
+        DrawRightPanel(mdc);
         if (fail) {
             ciFail.Draw(mdc, GWidth / 2 - ciFail.GetWidth() * ZOOM / 2, 100, ciFail.GetWidth() * ZOOM,
                         ciFail.GetHeight() * ZOOM);
@@ -313,17 +315,21 @@ void DrawRightPanel(HDC mdc) {
     ciTitleBk.Draw(rightpanel, 0, 0, ciRightPanel.GetWidth(), ciRightPanel.GetHeight(),
                    ciTitleBk.GetWidth() - ciRightPanel.GetWidth(), 0, ciRightPanel.GetWidth(), ciTitleBk.GetHeight());
 
+    // Draw Charactor
+    ciCharactor.Draw(rightpanel, 0, 200, int(ciCharactor.GetWidth() / 1.7), int(ciCharactor.GetHeight() / 1.7));
+
     // Draw Text
     CString cscore, cst;
     cst.Format("SCORE");
     cscore.Format("%06d", score);
     SIZE csize;
     GetTextExtentPoint32(rightpanel, cst, cst.GetLength(), &csize);
-    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 100, cst, cst.GetLength());
+    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 50, cst, cst.GetLength());
     GetTextExtentPoint32(rightpanel, cscore, cscore.GetLength(), &csize);
-    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 150, cscore, cscore.GetLength());
+    TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 120, cscore, cscore.GetLength());
     DeleteObject(normalFont);
 
+    // RightPanel Done
     ciRightPanel.ReleaseDC();
     ciRightPanel.Draw(mdc, GWidth, 0);
 }
