@@ -44,5 +44,63 @@
     <ClInclude Include="entity.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Touhou.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\background.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\bullet1.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\bullet2.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\enemy1.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\enemy2.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\etbreak.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\fail.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\GameStart.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\pl00.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\pl00bullet.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\retry.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\title.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\title_bk00.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\title_bk01.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\title_pl00.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\win.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

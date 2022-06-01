@@ -5,6 +5,7 @@
 
 #include "entity.h"
 #include "globalVariable.h"
+#include "resource.h"
 #include "tools.h"
 
 ATOM MyRegisterClass(HINSTANCE hInstance);
@@ -15,6 +16,8 @@ HDC hdc;
 HFONT normalFont;
 HWND hwnd;
 ULONGLONG tPre, tNow;
+
+HINSTANCE hins;
 
 CImage ciScreen;
 RECT rect;
@@ -44,6 +47,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     if (!InitInstance(hInstance, iCmdShow)) {
         return FALSE;
     }
+
+    hins = hInstance;
 
     GetMessage(&msg, NULL, NULL, NULL);
     while (msg.message != WM_QUIT) {
@@ -119,39 +124,22 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     ciScreen.Create(1024, 768, 32);
 
     // resources load
-    CString csBkBlock = "resources/background.png";
-    CString csPlayer = "resources/pl00.png";
-    CString csTitleBk0 = "resources/title_bk00.png";
-    CString csTitleBk = "resources/title_bk01.png";
-    CString csGameStart = "resources/GameStart.png";
-    CString csBreak = "resources/etbreak.png";
-    CString csPlayerBullet = "resources/pl00bullet.png";
-    CString csEnemy1 = "resources/enemy1.png";
-    CString csEnemyBullet = "resources/bullet1.png";
-    CString csEnemy2 = "resources/enemy2.png";
-    CString csEnemyBullet2 = "resources/bullet2.png";
-    CString csWin = "resources/win.png";
-    CString csFail = "resources/fail.png";
-    CString csRetry = "resources/retry.png";
-    CString csTitle = "resources/title.png";
-    CString csCharactor = "resources/title_pl00.png";
-
-    LoadImg(ciBkBlock, csBkBlock);
-    LoadImg(ciPlayer, csPlayer);
-    LoadImg(ciTitleBk0, csTitleBk0);
-    LoadImg(ciTitleBk, csTitleBk);
-    LoadImg(ciGameStart, csGameStart);
-    LoadImg(ciBreak, csBreak);
-    LoadImg(ciPlayerBullet, csPlayerBullet);
-    LoadImg(ciEnemy1, csEnemy1);
-    LoadImg(ciEnemyBullet, csEnemyBullet);
-    LoadImg(ciEnemy2, csEnemy2);
-    LoadImg(ciEnemyBullet2, csEnemyBullet2);
-    LoadImg(ciWin, csWin);
-    LoadImg(ciFail, csFail);
-    LoadImg(ciRetry, csRetry);
-    LoadImg(ciTitle, csTitle);
-    LoadImg(ciCharactor, csCharactor);
+    LoadImg(ciBkBlock, IDB_BkBlock);
+    LoadImg(ciPlayer, IDB_Player);
+    LoadImg(ciTitleBk0, IDB_TitleBk0);
+    LoadImg(ciTitleBk, IDB_TitleBk);
+    LoadImg(ciGameStart, IDB_GameStart);
+    LoadImg(ciBreak, IDB_Break);
+    LoadImg(ciPlayerBullet, IDB_PlayerBullet);
+    LoadImg(ciEnemy1, IDB_Enemy1);
+    LoadImg(ciEnemyBullet, IDB_EnemyBullet);
+    LoadImg(ciEnemy2, IDB_Enemy2);
+    LoadImg(ciEnemyBullet2, IDB_EnemyBullet2);
+    LoadImg(ciWin, IDB_Win);
+    LoadImg(ciFail, IDB_Fail);
+    LoadImg(ciRetry, IDB_Retry);
+    LoadImg(ciTitle, IDB_Title);
+    LoadImg(ciCharactor, IDB_Charactor);
 
     ciLeftPanel.Create(GWidth, GHeight, 32);
     ciRightPanel.Create(rect.right - GWidth, GHeight, 32);
@@ -167,7 +155,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     ciBackground.ReleaseDC();
 
     // Font
-
     normalFont = CreateFont(45, 32, 0, 0, FW_MEDIUM, false, false, false, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
                             CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, "normal");
 

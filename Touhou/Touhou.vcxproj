@@ -149,7 +149,29 @@
   <ItemGroup>
     <ClInclude Include="entity.h" />
     <ClInclude Include="globalVariable.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="tools.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Touhou.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\background.png" />
+    <Image Include="Resources\bullet1.png" />
+    <Image Include="Resources\bullet2.png" />
+    <Image Include="Resources\enemy1.png" />
+    <Image Include="Resources\enemy2.png" />
+    <Image Include="Resources\etbreak.png" />
+    <Image Include="Resources\fail.png" />
+    <Image Include="Resources\GameStart.png" />
+    <Image Include="Resources\pl00.png" />
+    <Image Include="Resources\pl00bullet.png" />
+    <Image Include="Resources\retry.png" />
+    <Image Include="Resources\title.png" />
+    <Image Include="Resources\title_bk00.png" />
+    <Image Include="Resources\title_bk01.png" />
+    <Image Include="Resources\title_pl00.png" />
+    <Image Include="Resources\win.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

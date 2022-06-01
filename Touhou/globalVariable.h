@@ -9,6 +9,8 @@ extern HFONT normalFont;
 extern HWND hwnd;
 extern ULONGLONG tPre, tNow;
 
+extern HINSTANCE hins;
+
 constexpr int ZOOM = 2;
 constexpr int GWidth = 730;
 constexpr int GHeight = 768;
