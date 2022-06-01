@@ -1,4 +1,4 @@
-#include "tools.h"
+ï»¿#include "tools.h"
 
 #include <atlimage.h>
 #include <math.h>
@@ -12,7 +12,7 @@ bool LoadImg(CImage& image, UINT uResID) {
         return false;
     }
 
-    // ÅĞ¶ÏÊÇ·ñĞèÒªÍ¸Ã÷ÏÔÊ¾£¬²¢×öÏàÓ¦´¦Àí
+    // åˆ¤æ–­æ˜¯å¦éœ€è¦é€æ˜æ˜¾ç¤ºï¼Œå¹¶åšç›¸åº”å¤„ç†
     if (image.GetBPP() == 32) {
         for (int i = 0; i < image.GetWidth(); ++i) {
             for (int j = 0; j < image.GetHeight(); ++j) {

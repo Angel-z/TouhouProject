@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <atlimage.h>
 
 #include "entity.h"
@@ -320,8 +320,8 @@ void DrawRightPanel(HDC mdc) {
 
     // Draw Text
     CString cscore, cst;
-    cst.Format("SCORE");
-    cscore.Format("%06d", score);
+    cst.Format(_T("SCORE"));
+    cscore.Format(_T("%06d"), score);
     SIZE csize;
     GetTextExtentPoint32(rightpanel, cst, cst.GetLength(), &csize);
     TextOut(rightpanel, ciRightPanel.GetWidth() / 2 - csize.cx / 2, 50, cst, cst.GetLength());

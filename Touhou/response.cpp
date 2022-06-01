@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <atlimage.h>
 
 #include "globalVariable.h"

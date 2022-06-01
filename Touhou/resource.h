@@ -1,6 +1,6 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ Éú³ÉµÄ°üº¬ÎÄ¼ş¡£
-// ¹© Touhou.rc Ê¹ÓÃ
+ï»¿//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ ç”Ÿæˆçš„åŒ…å«æ–‡ä»¶ã€‚
+// ä¾› Touhou.rc ä½¿ç”¨
 //
 #define IDB_BkBlock 101
 #define IDB_EnemyBullet 102

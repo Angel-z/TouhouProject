@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <atlimage.h>
 
 #include <vector>
@@ -86,14 +86,14 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = NULL;
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = "Touhou";
+    wcex.lpszClassName = _T("Touhou");
     wcex.hIconSm = NULL;
 
     return RegisterClassEx(&wcex);
 }
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
-    hwnd = CreateWindow("Touhou", "Touhou Project", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME,
+    hwnd = CreateWindow(_T("Touhou"), _T("Touhou Project"), WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME,
                         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
     if (!hwnd) {
@@ -156,7 +156,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 
     // Font
     normalFont = CreateFont(45, 32, 0, 0, FW_MEDIUM, false, false, false, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
-                            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, "normal");
+                            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, _T("normal"));
 
     return TRUE;
 }

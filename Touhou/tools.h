@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <atlimage.h>
 
 bool LoadImg(CImage& image, UINT uResID);

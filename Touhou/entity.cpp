@@ -1,4 +1,4 @@
-#include "entity.h"
+﻿#include "entity.h"
 
 #include <atlimage.h>
 
