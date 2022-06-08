@@ -63,6 +63,7 @@ void GameProgress() {
         }
     } else if (GameTurn <= Stage2_Loop + 1) {
         if (stage2ini) {
+            srand(111);
             EnemyExists.clear();
             for (auto it = WaitToDelete.begin(); it != WaitToDelete.end(); ++it) {
                 delete (*it);
