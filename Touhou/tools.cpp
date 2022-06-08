@@ -29,7 +29,7 @@ bool LoadImg(CImage& image, UINT uResID) {
 
 bool C2C(int circle1x, int circle1y, int circle1r, int circle2x, int circle2y, int circle2r) {
     double dis = sqrt((circle1x - circle2x) * (circle1x - circle2x) + (circle1y - circle2y) * (circle1y - circle2y));
-    if (dis - double(circle1r + circle2r) < 1e-7) {
+    if (dis - ((double)circle1r + (double)circle2r) < 1e-7) {
         return true;
     } else {
         return false;
@@ -37,15 +37,15 @@ bool C2C(int circle1x, int circle1y, int circle1r, int circle2x, int circle2y, i
 }
 
 bool C2R(int cx, int cy, int cr, int rx, int ry, int rw, int rh) {
-    double x = cx - rx;
-    double y = cy - ry;
+    double x = (double)cx - (double)rx;
+    double y = (double)cy - (double)ry;
 
     double minx = min(x, rw / 2.0);
     double maxx = max(minx, -(rw / 2.0));
     double miny = min(y, rh / 2.0);
     double maxy = max(miny, -(rh / 2.0));
 
-    if ((maxx - x) * (maxx - x) + (maxy - y) * (maxy - y) <= double(cr * cr)) {
+    if ((maxx - x) * (maxx - x) + (maxy - y) * (maxy - y) <= ((double)cr * (double)cr)) {
         return true;
     } else {
         return false;

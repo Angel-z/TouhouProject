@@ -63,6 +63,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
                     GamePaint(hdc);
                     GameCheck();
                     Record();
+                } else if (replaying) {
+                    GameProgress();
+                    GamePaint(hdc);
+                    Replay();
                 } else {
                     MenuPaint(hdc);
                     MenuCheck();

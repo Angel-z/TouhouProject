@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 #include <atlimage.h>
-#include <iostream>
+
+#include <fstream>
 
 #include "entity.h"
 
@@ -56,7 +57,8 @@ extern int GameTurn;
 extern bool stage1ini, stage2ini;
 
 // Replay
-extern std::streampos recordPos; // TODO reset to 0
+extern std::streampos recordPos;  // TODO reset to 0
+extern bool replaying;
 
 // Func
 void GamePaint(HDC hdc);
