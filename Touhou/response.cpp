@@ -10,13 +10,17 @@ bool LBdown = false, bShift = false;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_KEYDOWN: {
-            if (wParam == VK_SHIFT) {
+            if (running && wParam == VK_SHIFT) {
                 bShift = true;
                 iPlayerSpeed = 7;
+            } else if (wParam == VK_ESCAPE) {
+                running = false;
+                win = false;
+                fail = false;
             }
         } break;
         case WM_KEYUP: {
-            if (wParam == VK_SHIFT) {
+            if (running && wParam == VK_SHIFT) {
                 bShift = false;
                 iPlayerSpeed = 15;
             }

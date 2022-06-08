@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="check.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="paint.cpp" />
     <ClCompile Include="progress.cpp" />
+    <ClCompile Include="Replay.cpp" />
     <ClCompile Include="response.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
@@ -166,6 +168,7 @@
     <Image Include="Resources\GameStart.png" />
     <Image Include="Resources\pl00.png" />
     <Image Include="Resources\pl00bullet.png" />
+    <Image Include="Resources\replay.png" />
     <Image Include="Resources\retry.png" />
     <Image Include="Resources\title.png" />
     <Image Include="Resources\title_bk00.png" />

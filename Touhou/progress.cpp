@@ -40,13 +40,13 @@ void GameProgress() {
                     return;
                 }
                 // Spawn
-                for (int i = 0; i < 2; ++i) {
+                for (int i = 0; i < 3; ++i) {
                     Enemy1 *tmp1 = new Enemy1();
-                    tmp1->xySet(275 * i + 80, 50);
+                    tmp1->xySet(275 * i + 80 - GWidth, 50);
                     WaitToDelete.push_back(tmp1);
                     EnemyExists.push_back(tmp1);
                     Enemy2 *tmp2 = new Enemy2();
-                    tmp2->xySet(275 * i + 225, 150);
+                    tmp2->xySet(275 * i + 225 - GWidth, 150);
                     WaitToDelete.push_back(tmp2);
                     EnemyExists.push_back(tmp2);
                 }

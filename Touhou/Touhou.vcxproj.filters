@@ -33,6 +33,12 @@
     <ClCompile Include="progress.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="check.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Replay.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tools.h">
@@ -100,6 +106,9 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="Resources\win.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\replay.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

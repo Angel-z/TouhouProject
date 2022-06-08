@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <atlimage.h>
+#include <iostream>
 
 #include "entity.h"
 
@@ -42,6 +43,7 @@ extern bool running, win, fail;
 extern int iPlayerSpeed;
 extern bool bPLeft, bPRight, bPUp, bPDown;
 extern bool bShift;
+extern bool bPShoot;
 
 // Mouse Check
 extern int iMx, iMy;
@@ -53,9 +55,15 @@ constexpr int Stage2_Loop = 6;
 extern int GameTurn;
 extern bool stage1ini, stage2ini;
 
+// Replay
+extern std::streampos recordPos; // TODO reset to 0
+
 // Func
 void GamePaint(HDC hdc);
 void GameCheck();
 void MenuPaint(HDC hdc);
 void MenuCheck();
 void GameProgress();
+
+void Record();
+void Replay();
