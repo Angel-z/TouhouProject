@@ -1,5 +1,7 @@
 ﻿#include <Windows.h>
 
+#include <fstream>
+
 #include "entity.h"
 #include "globalVariable.h"
 #include "tools.h"
@@ -192,6 +194,7 @@ void MenuCheck() {
                 fail = false;
                 remove("record.dat");
             }
+            LBdown = false;
         }
     } else {
         if (LBdown) {
@@ -203,7 +206,24 @@ void MenuCheck() {
                 win = false;
                 fail = false;
                 remove("record.dat");
+            } else if (iMx > 50 && iMx < -100 + ciReplay.GetWidth() / 2 && iMy > (400 + ciGameStart.GetHeight() + 20) &&
+                       iMy < (400 + ciGameStart.GetHeight() + 20) + ciReplay.GetHeight()) {
+                std::fstream file;
+                file.open("record.dat", std::ios::in);
+                if (!file) {
+                    MessageBox(hwnd, _T("未找到回放文件"), _T("无法回放"), MB_OK);
+                } else {
+                    file.close();
+                    GameTurn = 0;
+                    stage1ini = true;
+                    win = false;
+                    fail = false;
+                    running = false;
+                    replaying = true;
+                    recordPos = 0;
+                }
             }
+            LBdown = false;
         }
     }
 }

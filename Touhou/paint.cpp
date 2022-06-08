@@ -58,6 +58,15 @@ void MenuPaint(HDC hdc) {
             ciGameStart.Draw(mdc, 50, 400, ciGameStart.GetWidth() / 2, ciGameStart.GetHeight(), 0, 0,
                              ciGameStart.GetWidth() / 2, ciGameStart.GetHeight());
         }
+        if (iMx > 50 && iMx < -100 + ciReplay.GetWidth() / 2 && iMy > (400 + ciGameStart.GetHeight() + 20) &&
+            iMy < (400 + ciGameStart.GetHeight() + 20) + ciReplay.GetHeight()) {
+            SetCursor(::LoadCursor(nullptr, IDC_HAND));
+            ciReplay.Draw(mdc, 50, (400 + ciGameStart.GetHeight() + 20), ciReplay.GetWidth() / 2, ciReplay.GetHeight(),
+                          ciReplay.GetWidth() / 2, 0, ciReplay.GetWidth() / 2, ciReplay.GetHeight());
+        } else {
+            ciReplay.Draw(mdc, 50, (400 + ciGameStart.GetHeight() + 20), ciReplay.GetWidth() / 2, ciReplay.GetHeight(),
+                          0, 0, ciReplay.GetWidth() / 2, ciReplay.GetHeight());
+        }
     }
 
     // Done

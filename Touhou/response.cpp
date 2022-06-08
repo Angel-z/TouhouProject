@@ -14,17 +14,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 bShift = true;
                 iPlayerSpeed = 7;
             } else if (wParam == VK_ESCAPE) {
+                replaying = false;
                 running = false;
                 win = false;
                 fail = false;
-            } else if (wParam == 'R') {
-                GameTurn = 0;
-                stage1ini = true;
-                win = false;
-                fail = false;
-                running = false;
-                replaying = true;
-                recordPos = 0;
             }
         } break;
         case WM_KEYUP: {
