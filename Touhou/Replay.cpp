@@ -114,50 +114,10 @@ void Replay() {
                     ++itpl;
                 }
             }
-            // Enemy To Player
-            if (bShift) {
-                if (C2R(player.ix, player.iy, player.iRadius, (*it)->ix, (*it)->iy, (*it)->iWidth - 30,
-                        (*it)->iHeight - 20)) {
-                    fail = true;
-                    win = false;
-                    running = false;
-                    return;
-                }
-            } else {
-                if (R2R((*it)->ix, (*it)->iy, (*it)->iWidth - 30, (*it)->iHeight - 20, player.ix, player.iy,
-                        player.iWidth - 40, player.iHeight - 40)) {
-                    fail = true;
-                    win = false;
-                    running = false;
-                    return;
-                }
-            }
         } else {
             if (tmpBullet->ptPos.empty() && (*it)->bCanBeDeleted) {
                 it = EnemyExists.erase(it);
                 continue;
-            }
-        }
-
-        // EnemyBullet To Player
-        if (bShift) {
-            for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
-                if (C2C(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iRadius)) {
-                    fail = true;
-                    win = false;
-                    running = false;
-                    return;
-                }
-            }
-        } else {
-            for (auto itbullet = tmpBullet->ptPos.begin(); itbullet != tmpBullet->ptPos.end(); ++itbullet) {
-                if (C2R(itbullet->x, itbullet->y, tmpBullet->iRadius, player.ix, player.iy, player.iWidth - 40,
-                        player.iHeight - 40)) {
-                    fail = true;
-                    win = false;
-                    running = false;
-                    return;
-                }
             }
         }
 
